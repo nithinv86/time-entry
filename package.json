@@ -1,0 +1,28 @@
+{
+  "name": "@mails2nithin/zoho-time-entry",
+  "version": "1.0.0",
+  "description": "Zoho time entry cli",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "start:dev": "nodemon index",
+    "test": "npm run test",
+    "lint": "eslint \"{services,public}/**/*.js\" --fix",
+    "prettier": "prettier \"{services,public}/**/*.(html|scss|json|js)\" --write"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/nithinv86/zoho-time-entry.git"
+  },
+  "keywords": [
+    "zoho",
+    "time",
+    "entry"
+  ],
+  "author": "Nithin V <mails2nithin@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/nithinv86/zoho-time-entry/issues"
+  },
+  "homepage": "https://gitlab.com/nithinv86/zoho-time-entry#readme"
+}
