@@ -216,22 +216,21 @@ async function addNewTask(values) {
     project: 'project',
     s: 'sprint',
     sprint: 'sprint',
-    t: 'taskId',
-    taskId: 'taskId',
-    d: 'date',
+    t: 'task',
+    task: 'task',
+    dt: 'date',
     date: 'date',
-    i: 'workType',
-    item: 'workType',
-    dur: 'duration',
+    w: 'work',
+    work: 'work',
+    du: 'duration',
     duration: 'duration',
-    n: 'notes',
-    note: 'notes',
-    notes: 'notes',
+    r: 'remarks',
+    remarks: 'remarks',
   };
 
   for (const item of values) {
     let [key, ...itemValues] = item.split(' ');
-    const itemValue = itemValues.join(' ');
+    let itemValue = itemValues.join(' ');
 
     if (key.charAt(0) === '-') {
       key = key.substring(1);
@@ -240,18 +239,25 @@ async function addNewTask(values) {
     switch (key) {
       case 's':
       case 'sprint': {
-        if (itemValues?.length > 1) {
-          data[keyMap[key]] = itemValue;
-        } else {
-          data[keyMap[key]] = `sprint ${itemValue}`;
+        if (!itemValue.includes('sprint')) {
+          itemValue = `sprint ${itemValue}`;
         }
+
+        data[keyMap[key]] = itemValue;
 
         break;
       }
 
-      case 'd':
+      case 'dt':
       case 'date': {
-        data[keyMap[key]] = format(new Date(itemValue), 'yyyy-MM-dd');
+        data[keyMap[key]] = new Date(itemValue).toISOString();
+
+        break;
+      }
+
+      case 'du':
+      case 'duration': {
+        data[keyMap[key]] = +itemValue;
 
         break;
       }
@@ -264,13 +270,7 @@ async function addNewTask(values) {
     }
   }
 
-  addTask(data)
-    .then(() => {
-      console.log('Created successfully.');
-    })
-    .catch((error) => {
-      console.error(error.message);
-    });
+  await addTask(data);
 }
 
 async function updateTask(values) {
