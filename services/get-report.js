@@ -2,75 +2,54 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-undef */
 
-const { notion, taskDB } = require('./config');
+const { userConfig } = require('./config');
+const { connect } = require('./db');
 const { format, subDays } = require('date-fns');
 
 module.exports = {
   getReport: async (from, to) => {
+    const { database_collection } = await userConfig();
+    const db = await connect();
+    const collection = db.collection(database_collection);
+
     if (!from) {
-      from = format(subDays(new Date(), 7), 'yyyy-MM-dd');
-      return;
+      from = subDays(new Date(), 7);
     }
 
     if (!to) {
-      to = format(new Date(), 'yyyy-MM-dd');
+      to = new Date();
     }
 
-    const on_or_after = new Date(from).toISOString();
-    const on_or_before = new Date(to).toISOString();
-    const filter = { and: [{ property: 'date', date: { on_or_after, on_or_before } }] };
+    const $gte = new Date(from).toISOString();
+    const $lte = new Date(to).toISOString();
 
     try {
-      const taskResponse = await notion.databases.query({ database_id: taskDB, filter });
+      const resp = await collection.find({ date: { $gte, $lte } }).toArray();
 
-      const report = (taskResponse?.results || []).reduce((resp, { properties }) => {
-        const date = properties.date.date.start;
-        const task = properties.workType.rich_text?.[0]?.plain_text;
+      return (resp || []).reduce((res, { date, task, synced, duration }) => {
+        date = format(new Date(date), 'yyyy-MM-dd');
 
-        resp[date] = {
-          synced: resp[date]?.synced || 0,
-          open: resp[date]?.open || 0,
-          task: resp[date]?.task || 0,
-          adhoc: resp[date]?.adhoc || 0,
+        res[date] = {
+          synced: res[date]?.synced || 0,
+          open: res[date]?.open || 0,
+          task: res[date]?.task || 0,
+          adhoc: res[date]?.adhoc || 0,
         };
 
-        if (properties.synced.checkbox) {
-          resp[date].synced += properties.duration.number;
+        if (synced) {
+          res[date].synced += duration;
         } else {
-          resp[date].open += properties.duration.number;
+          res[date].open += duration;
         }
 
         if (task === 'Adhoc' || task === 'Internal connects' || task === 'Internal connect') {
-          resp[date].adhoc += properties.duration.number;
+          res[date].adhoc += duration;
         } else {
-          resp[date].task += properties.duration.number;
+          res[date].task += duration;
         }
 
-        return resp;
+        return res;
       }, {});
-
-      /* for (const { properties } of adhocResponse?.results || []) {
-        const date = properties.date.date.start;
-
-        if (!properties.synced.checkbox) {
-          report[date].adhoc += properties.duration.number;
-        }
-      } */
-
-      const filtertedResults = {};
-      let currentDate = new Date(from);
-
-      while (currentDate <= new Date(to)) {
-        const formattedDate = format(currentDate, 'yyyy-MM-dd');
-
-        if (report[formattedDate]) {
-          filtertedResults[formattedDate] = report[formattedDate];
-        }
-
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-
-      return filtertedResults;
     } catch (error) {
       console.error(error.message);
     }
