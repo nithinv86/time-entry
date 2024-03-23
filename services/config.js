@@ -39,18 +39,21 @@ module.exports = {
   },
   userConfig: async () => {
     return new Promise((resolve, reject) => {
-      fs.access(filePath, fs.constants.F_OK, (err) => {
+      fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
-          console.log('Configurations are missing');
-          reject(new Error('Configurations are missing'));
+          reject(err);
         } else {
-          fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(JSON.parse(data));
+          try {
+            const jsonData = JSON.parse(data);
+
+            if (!Object.values(jsonData).length) {
+              throw new Error('No configurations found, try `zoho init` as first step.');
             }
-          });
+
+            resolve(jsonData);
+          } catch (parseError) {
+            reject(parseError);
+          }
         }
       });
     });
