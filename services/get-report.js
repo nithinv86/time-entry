@@ -1,13 +1,11 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-undef */
+import { format, subDays } from 'date-fns';
+import { userConfig } from './config';
+import { connect } from './db';
 
-const { userConfig } = require('./config');
-const { connect } = require('./db');
-const { format, subDays } = require('date-fns');
+module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };
 
-module.exports = {
-  getReport: async (from, to) => {
+const getTasksByDate = async (from, to) => {
+  try {
     const { database_collection } = await userConfig();
     const db = await connect();
     const collection = db.collection(database_collection);
@@ -23,35 +21,78 @@ module.exports = {
     const $gte = new Date(from).toISOString();
     const $lte = new Date(to).toISOString();
 
-    try {
-      const resp = await collection.find({ date: { $gte, $lte } }).toArray();
+    return await collection.find({ date: { $gte, $lte } }).toArray();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const getTasksBySynced = async (synced = false) => {
+  try {
+    const { database_collection } = await userConfig();
+    const db = await connect();
+    const collection = db.collection(database_collection);
 
-      return (resp || []).reduce((res, { date, task, synced, duration }) => {
-        date = format(new Date(date), 'yyyy-MM-dd');
+    return await collection.find({ synced }).toArray();
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const getReport = async (from, to) => {
+  try {
+    const resp = await getTasksByDate(from, to);
 
-        res[date] = {
-          synced: res[date]?.synced || 0,
-          open: res[date]?.open || 0,
-          task: res[date]?.task || 0,
-          adhoc: res[date]?.adhoc || 0,
-        };
+    return (resp || []).reduce((res, { date, task, synced, duration }) => {
+      date = format(new Date(date), 'yyyy-MM-dd');
 
-        if (synced) {
-          res[date].synced += duration;
-        } else {
-          res[date].open += duration;
-        }
+      res[date] = {
+        synced: res[date]?.synced || 0,
+        open: res[date]?.open || 0,
+        task: res[date]?.task || 0,
+        adhoc: res[date]?.adhoc || 0,
+      };
 
-        if (task === 'Adhoc' || task === 'Internal connects' || task === 'Internal connect') {
-          res[date].adhoc += duration;
-        } else {
-          res[date].task += duration;
-        }
+      if (synced) {
+        res[date].synced += duration;
+      } else {
+        res[date].open += duration;
+      }
 
-        return res;
-      }, {});
-    } catch (error) {
-      console.error(error.message);
+      if (task === 'Adhoc' || task === 'Internal connects' || task === 'Internal connect') {
+        res[date].adhoc += duration;
+      } else {
+        res[date].task += duration;
+      }
+
+      return res;
+    }, {});
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const getStatus = async (values) => {
+  const data = {};
+  const keyMap = {
+    f: 'from',
+    from: 'from',
+    t: 'to',
+    to: 'to',
+  };
+
+  if (values?.length) {
+    for (const item of values) {
+      let [key, ...itemValues] = item.split(' ');
+      const itemValue = itemValues.join(' ');
+
+      if (key.charAt(0) === '-') {
+        key = key.substring(1);
+      }
+
+      data[keyMap[key]] = format(new Date(itemValue), 'yyyy-MM-dd');
     }
-  },
+  } else {
+    data.from = format(new Date(new Date().setDate(new Date().getDate() - 7)), 'yyyy-MM-dd');
+    data.to = format(new Date(), 'yyyy-MM-dd');
+  }
+
+  console.log(await getReport(data.from, data.to));
 };

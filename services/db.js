@@ -1,8 +1,5 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
-
-const { MongoClient } = require('mongodb');
-const { userConfig } = require('./config');
+import { MongoClient } from 'mongodb';
+import { userConfig } from './config';
 
 async function connect() {
   const { database_host, database_user, database_pass, database_name } = await userConfig();
@@ -24,8 +21,5 @@ async function connect() {
 
   return client.db();
 }
-async function disconnect() {
-  await client.close();
-}
 
-module.exports = { connect, disconnect };
+module.exports = { connect };
