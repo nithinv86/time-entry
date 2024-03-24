@@ -1,31 +1,28 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-undef */
-
 const { MongoClient } = require('mongodb');
 const { userConfig } = require('./config');
-
-async function connect() {
-  const { database_host, database_user, database_pass, database_name } = await userConfig();
+const connect = async () => {
+  const { db } = await userConfig();
   let uri = 'mongodb://';
 
-  if (database_user) {
-    uri += `${database_user}:${database_pass}@`;
+  if (db.user) {
+    uri += `${db.user}:${db.password}@`;
   }
 
-  uri += `${database_host}/${database_name}`;
+  uri += `${db.host}/${db.name}`;
 
   if (uri === 'mongodb://') {
     throw new Error('Missing MONGO_HOST');
   }
 
-  const client = new MongoClient(uri);
+  try {
+    const client = new MongoClient(uri);
 
-  await client.connect();
+    await client.connect();
 
-  return client.db();
-}
-async function disconnect() {
-  await client.close();
-}
+    return client.db();
+  } catch (error) {
+    console.error('MongoDB is not available:', error);
+  }
+};
 
-module.exports = { connect, disconnect };
+module.exports = { connect };

@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index",
     "start:dev": "nodemon index",
+    "postinstall": "./post-install.js",
     "test": "npm run test",
     "lint": "eslint \"{services,public}/**/*.js\" --fix",
     "prettier": "prettier \"{services,public}/**/*.(html|scss|json|js)\" --write"
@@ -29,24 +30,24 @@
   },
   "homepage": "https://gitlab.com/nithinv86/zoho-time-entry#readme",
   "dependencies": {
-    "axios": "^1.6.8",
-    "compression": "^1.7.4",
-    "date-fns": "^2.30.0",
-    "date-fns-tz": "^2.0.1",
-    "dotenv": "^16.4.5",
-    "mongodb": "^6.5.0"
+    "axios": "~1.6.8",
+    "compression": "~1.7.4",
+    "date-fns": "~2.30.0",
+    "date-fns-tz": "~2.0.1",
+    "dotenv": "~16.4.5",
+    "mongodb": "~6.5.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.3.1",
-    "eslint": "^8.57.0",
-    "eslint-config-semistandard": "^17.0.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-n": "^15.7.0",
-    "eslint-plugin-promise": "^6.1.1",
-    "husky": "^4.2.5",
-    "lint-staged": "^15.2.2",
-    "prettier": "^3.2.5"
+    "@typescript-eslint/eslint-plugin": "~7.3.1",
+    "eslint": "~8.57.0",
+    "eslint-config-semistandard": "~17.0.0",
+    "eslint-config-standard": "~17.1.0",
+    "eslint-plugin-import": "~2.29.1",
+    "eslint-plugin-n": "~15.7.0",
+    "eslint-plugin-promise": "~6.1.1",
+    "husky": "~4.3.6",
+    "lint-staged": "~15.2.2",
+    "prettier": "~3.2.5"
   },
   "lint-staged": {
     "**/*.(js)": [
@@ -60,5 +61,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "type": "commonjs"
 }
