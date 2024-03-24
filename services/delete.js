@@ -1,16 +1,15 @@
 const { userConfig } = require('./config');
 const { connect } = require('./db');
-
-module.exports = { deleteTask };
-
 const deleteTask = async (id) => {
   try {
-    const { database_collection } = await userConfig();
+    const { db: database } = await userConfig();
     const db = await connect();
-    const collection = db.collection(database_collection);
+    const collection = db.collection(database.collection);
 
     await collection.deleteOne({ id });
   } catch (error) {
     console.log(error.message);
   }
 };
+
+module.exports = { deleteTask };

@@ -1,7 +1,4 @@
 const { keyMap } = require('./config');
-
-module.exports = { convertToTaskData, groupBy, removeEmpty };
-
 const removeEmpty = (obj) => {
   for (let [key, val] of Object.entries(obj)) {
     if (val && typeof val === 'object') {
@@ -39,9 +36,7 @@ const groupBy = (arr, key) => {
   }, {});
 };
 const convertToTaskData = (values) => {
-  const data = {};
-
-  for (const item of values) {
+  return values.reduce((acc, item) => {
     let [key, ...itemValues] = item.split(' ');
     let itemValue = itemValues.join(' ');
 
@@ -56,32 +51,34 @@ const convertToTaskData = (values) => {
           itemValue = `sprint ${itemValue}`;
         }
 
-        data[keyMap[key]] = itemValue;
+        acc[keyMap[key]] = itemValue;
 
         break;
       }
 
       case 'dt':
       case 'date': {
-        data[keyMap[key]] = new Date(itemValue).toISOString();
+        acc[keyMap[key]] = new Date(itemValue).toISOString();
 
         break;
       }
 
       case 'du':
       case 'duration': {
-        data[keyMap[key]] = +itemValue;
+        acc[keyMap[key]] = +itemValue;
 
         break;
       }
 
       default: {
-        data[keyMap[key]] = itemValue;
+        acc[keyMap[key]] = itemValue;
 
         break;
       }
     }
 
-    return data;
-  }
+    return acc;
+  }, {});
 };
+
+module.exports = { convertToTaskData, groupBy, removeEmpty };

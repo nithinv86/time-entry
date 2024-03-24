@@ -1,24 +1,21 @@
 const fs = require('fs');
 const { filePath, rl } = require('./config');
-
 const questions = [
-  { key: 'name', label: 'Your name' },
-  { key: 'email', label: 'email address' },
-  { key: 'userId', label: 'Your id' },
-  { key: 'cookie_secret', label: 'Cookie secret' },
-  { key: 'zcsrf_token', label: 'Zoho csrf token' },
-  { key: 'client_portal_id', label: 'Zoho client portal id' },
-  { key: 'session_id', label: 'Zoho session id' },
-  { key: 'za_source', label: 'Zoho source' },
-  { key: 'database_host', label: 'MongoDB host' },
-  { key: 'database_user', label: 'MongoDB user' },
-  { key: 'database_pass', label: 'MongoDB password' },
-  { key: 'database_name', label: 'MongoDB collection name' },
+  { parent: 'user', key: 'name', label: 'Your name' },
+  { parent: 'user', key: 'email', label: 'email address' },
+  { parent: 'zoho', key: 'userId', label: 'Zoho id' },
+  { parent: 'zoho', key: 'cookie', label: 'Cookie secret' },
+  { parent: 'zoho', key: 'token', label: 'Zoho csrf token' },
+  { parent: 'zoho', key: 'portalId', label: 'Zoho client portal id' },
+  { parent: 'zoho', key: 'sessionId', label: 'Zoho session id' },
+  { parent: 'zoho', key: 'source', label: 'Zoho source' },
+  { parent: 'db', key: 'host', label: 'MongoDB host' },
+  { parent: 'db', key: 'user', label: 'MongoDB user' },
+  { parent: 'db', key: 'password', label: 'MongoDB password' },
+  { parent: 'db', key: 'name', label: 'MongoDB database name' },
+  { parent: 'db', key: 'collection', label: 'MongoDB collection name' },
 ];
-let answers = {};
-
-module.exports = { init, getConfigDetails, checkConfig };
-
+let answers = { user: {}, zoho: {}, db: {} };
 const init = async () => {
   console.log('%cWelcome to Zoho Time Entry CLI!', 'color:green');
 
@@ -43,8 +40,10 @@ const getConfigDetails = (index) => {
     return;
   }
 
-  rl.question(`${questions[index].label} : `, (userInput) => {
-    answers[questions[index].key] = userInput;
+  const { parent, key, label } = questions[index];
+
+  rl.question(`${label} : `, (userInput) => {
+    answers[parent][key] = userInput;
 
     getConfigDetails(index + 1);
   });
@@ -56,7 +55,6 @@ const checkConfig = async () => {
         console.log('Configurations are missing');
         getConfigDetails(0);
       } else {
-        // File exists, read it
         fs.readFile(filePath, 'utf8', (err, data) => {
           if (err) {
             throw err;
@@ -70,3 +68,5 @@ const checkConfig = async () => {
     });
   });
 };
+
+module.exports = { init, getConfigDetails, checkConfig };

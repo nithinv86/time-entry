@@ -1,8 +1,5 @@
 const axios = require('axios');
 const { headers } = require('./config');
-
-module.exports = { getSprints };
-
 const getSprints = async ({ params }) => {
   const p = {
     index: params.index || 1,
@@ -37,3 +34,5 @@ const getSprints = async ({ params }) => {
     console.error(error.message);
   }
 };
+
+module.exports = { getSprints };

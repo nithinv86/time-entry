@@ -1,14 +1,11 @@
 const { userConfig } = require('./config');
 const { connect } = require('./db');
 const { convertToTaskData } = require('./utils');
-
-module.exports = { updateAdhocOrTask, updateTaskDetails };
-
 const updateAdhocOrTask = async (id, body) => {
   try {
-    const { database_collection } = await userConfig();
+    const { db: database } = await userConfig();
     const db = await connect();
-    const collection = db.collection(database_collection);
+    const collection = db.collection(database.collection);
     const newvalues = Object.fromEntries(
       Object.entries(body).map(([key, value]) => [key, key === 'duration' ? +value : value]),
     );
@@ -23,3 +20,5 @@ const updateTaskDetails = async (values) => {
 
   console.log(await updateAdhocOrTask(id, data));
 };
+
+module.exports = { updateAdhocOrTask, updateTaskDetails };
