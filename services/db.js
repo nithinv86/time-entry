@@ -1,5 +1,5 @@
-import { MongoClient } from 'mongodb';
-import { userConfig } from './config';
+const { MongoClient } = require('mongodb');
+const { userConfig } = require('./config');
 
 async function connect() {
   const { database_host, database_user, database_pass, database_name } = await userConfig();

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import { init } from './services/init-config';
-import { processArgs } from './services/process-commands';
+const { init } = require('./services/init-config');
+const { processArgs } = require('./services/process-commands');
 
 const [type, ...value] = (process.argv || []).splice(2);
 

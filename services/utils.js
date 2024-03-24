@@ -1,4 +1,4 @@
-import { keyMap } from './config';
+const { keyMap } = require('./config');
 
 module.exports = { convertToTaskData, groupBy, removeEmpty };
 

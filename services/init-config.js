@@ -1,5 +1,5 @@
-import fs from 'fs';
-import { filePath, rl } from './config';
+const fs = require('fs');
+const { filePath, rl } = require('./config');
 
 const questions = [
   { key: 'name', label: 'Your name' },

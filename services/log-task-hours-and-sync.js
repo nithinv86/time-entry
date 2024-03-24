@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { format, addMinutes, startOfDay } from 'date-fns';
-import { utcToZonedTime } from 'date-fns-tz';
-import { getTask } from './get-task';
-import { getSprints } from './get-sprints';
-import { getZohoTasks } from './get-zoho-tasks';
-import { markAsSynced } from './mark-as-synced';
-import { headers, userId } from './config';
+const axios = require('axios');
+const { format, addMinutes, startOfDay } = require('date-fns');
+const { utcToZonedTime } = require('date-fns-tz');
+const { getTask } = require('./get-task');
+const { getSprints } = require('./get-sprints');
+const { getZohoTasks } = require('./get-zoho-tasks');
+const { markAsSynced } = require('./mark-as-synced');
+const { headers, userId } = require('./config');
 
 module.exports = { logTaskHoursAndSync };
 

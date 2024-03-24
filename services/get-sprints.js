@@ -1,5 +1,5 @@
-import axios from 'axios';
-import { headers } from './config';
+const axios = require('axios');
+const { headers } = require('./config');
 
 module.exports = { getSprints };
 

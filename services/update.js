@@ -1,6 +1,6 @@
-import { userConfig } from './config';
-import { connect } from './db';
-import { convertToTaskData } from './utils';
+const { userConfig } = require('./config');
+const { connect } = require('./db');
+const { convertToTaskData } = require('./utils');
 
 module.exports = { updateAdhocOrTask, updateTaskDetails };
 

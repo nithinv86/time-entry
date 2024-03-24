@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node index",
     "start:dev": "nodemon index",
+    "postinstall": "./post-install.js",
     "test": "npm run test",
     "lint": "eslint \"{services,public}/**/*.js\" --fix",
     "prettier": "prettier \"{services,public}/**/*.(html|scss|json|js)\" --write"
@@ -60,5 +61,6 @@
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  }
+  },
+  "type": "commonjs"
 }

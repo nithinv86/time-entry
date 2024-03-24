@@ -1,6 +1,6 @@
-import axios from 'axios';
-import { getSprints } from './get-sprints';
-import { headers, userId } from './config';
+const axios = require('axios');
+const { getSprints } = require('./get-sprints');
+const { headers, userId } = require('./config');
 
 module.exports = { getZohoTasks };
 
