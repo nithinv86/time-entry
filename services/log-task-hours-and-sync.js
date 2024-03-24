@@ -1,17 +1,14 @@
 const axios = require('axios');
 const { format, addMinutes, startOfDay } = require('date-fns');
 const { utcToZonedTime } = require('date-fns-tz');
-const { getTask } = require('./get-task');
+const { getTasksBySynced } = require('./get-report');
 const { getSprints } = require('./get-sprints');
 const { getZohoTasks } = require('./get-zoho-tasks');
 const { markAsSynced } = require('./mark-as-synced');
 const { headers, userId } = require('./config');
-
-module.exports = { logTaskHoursAndSync };
-
 const logTaskHoursAndSync = async (project = '139011000000148327') => {
   const [tasks, zohoTasks, activeSprint] = await Promise.all([
-    getTask(),
+    getTasksBySynced(),
     getZohoTasks({ params: { subitem: true } }),
     getSprints({ params: { type: '2' } }),
   ]);
@@ -57,3 +54,5 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
 
   return response;
 };
+
+module.exports = { logTaskHoursAndSync };

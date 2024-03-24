@@ -7,11 +7,10 @@ const { addNewTask } = require('./add-task');
 const { updateTaskDetails } = require('./update');
 const { getSprints } = require('./get-sprints');
 const { getZohoTasks } = require('./get-zoho-tasks');
-
-module.exports = { processArgs };
-
 const processArgs = async (type, value) => {
-  checkConfig().then(async () => {
+  try {
+    await checkConfig();
+
     const values = value ? removeEmpty(value?.split(' -')) : value;
 
     switch (type) {
@@ -88,7 +87,11 @@ const processArgs = async (type, value) => {
         return;
       }
     }
+  } catch (error) {
+    console.log(error);
+  }
 
-    process.exit(1);
-  });
+  process.exit(1);
 };
+
+module.exports = { processArgs };

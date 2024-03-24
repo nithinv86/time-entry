@@ -1,12 +1,9 @@
 const { userConfig } = require('./config');
 const { connect } = require('./db');
-
-module.exports = { markAsSynced };
-
 const markAsSynced = async (id) => {
-  const { database_collection } = await userConfig();
+  const { db: database } = await userConfig();
   const db = await connect();
-  const collection = db.collection(database_collection);
+  const collection = db.collection(database.collection);
 
   try {
     await collection.updateOne({ id }, { $set: { synced: true } });
@@ -14,3 +11,5 @@ const markAsSynced = async (id) => {
     console.log(error.message);
   }
 };
+
+module.exports = { markAsSynced };

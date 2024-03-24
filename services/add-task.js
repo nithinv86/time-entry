@@ -1,15 +1,12 @@
 const { userConfig } = require('./config');
 const { connect } = require('./db');
 const { convertToTaskData } = require('./utils');
-
-module.exports = { addTask, addNewTask };
-
 const addTask = async (entry) => {
   try {
-    const { database_collection } = await userConfig();
+    const { db: database } = await userConfig();
     const entries = [];
     const db = await connect();
-    const collection = db.collection(database_collection);
+    const collection = db.collection(database.collection);
 
     if (!collection) {
       throw new Error('Collection not found');
@@ -45,3 +42,5 @@ const addNewTask = async (values) => {
 
   await addTask(data);
 };
+
+module.exports = { addTask, addNewTask };

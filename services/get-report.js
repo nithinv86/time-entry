@@ -1,14 +1,11 @@
 const { format, subDays } = require('date-fns');
 const { userConfig } = require('./config');
 const { connect } = require('./db');
-
-module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };
-
 const getTasksByDate = async (from, to) => {
   try {
-    const { database_collection } = await userConfig();
+    const { db: database } = await userConfig();
     const db = await connect();
-    const collection = db.collection(database_collection);
+    const collection = db.collection(database.collection);
 
     if (!from) {
       from = subDays(new Date(), 7);
@@ -28,9 +25,9 @@ const getTasksByDate = async (from, to) => {
 };
 const getTasksBySynced = async (synced = false) => {
   try {
-    const { database_collection } = await userConfig();
+    const { db: database } = await userConfig();
     const db = await connect();
-    const collection = db.collection(database_collection);
+    const collection = db.collection(database.collection);
 
     return await collection.find({ synced }).toArray();
   } catch (error) {
@@ -96,3 +93,5 @@ const getStatus = async (values) => {
 
   console.log(await getReport(data.from, data.to));
 };
+
+module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };

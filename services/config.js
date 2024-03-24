@@ -2,12 +2,8 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const readline = require('readline');
-
 const userHomeDir = os.homedir();
 const filePath = path.join(userHomeDir, '.zoho-config');
-
-module.exports = { filePath, rl, keyMap, headers, userConfig };
-
 const userConfig = async () => {
   return new Promise((resolve, reject) => {
     fs.readFile(filePath, 'utf8', (err, data) => {
@@ -30,14 +26,14 @@ const userConfig = async () => {
   });
 };
 const headers = async () => {
-  const t = await userConfig();
+  const { zoho } = await userConfig();
 
   return {
     authority: 'externalusers.zohosprints.com',
     accept: '*/*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
     'cache-control': 'no-cache',
-    cookie: t.cookie_secret,
+    cookie: zoho.cookie,
     pragma: 'no-cache',
     referer: 'https://externalusers.zohosprints.com/workspace/4medica/client/wmoku',
     'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
@@ -49,12 +45,12 @@ const headers = async () => {
     'user-agent':
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
     'x-requested-with': 'XMLHttpRequest',
-    'x-za-clientportalid': t.client_portal_id,
+    'x-za-clientportalid': zoho.portalId,
     'x-za-reqsize': 'large',
-    'x-za-sessionid': t.session_id,
-    'x-za-source': t.za_source,
+    'x-za-sessionid': zoho.sessionId,
+    'x-za-source': zoho.source,
     'x-za-ui-version': 'v2',
-    'x-zcsrf-token': t.zcsrf_token,
+    'x-zcsrf-token': zoho.token,
   };
 };
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
@@ -75,3 +71,5 @@ const keyMap = {
   remarks: 'remarks',
   id: 'id',
 };
+
+module.exports = { filePath, rl, keyMap, headers, userConfig };

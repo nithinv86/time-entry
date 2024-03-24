@@ -1,9 +1,6 @@
 const axios = require('axios');
 const { getSprints } = require('./get-sprints');
 const { headers, userId } = require('./config');
-
-module.exports = { getZohoTasks };
-
 const getZohoTasks = async ({ params }) => {
   if (!params?.sprint) {
     if (params?.type) {
@@ -61,3 +58,5 @@ const checkSprintId = async (id, req) => {
 
   return sprints.some(({ value }) => value === id);
 };
+
+module.exports = { getZohoTasks };
