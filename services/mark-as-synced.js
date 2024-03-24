@@ -1,20 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-undef */
+import { userConfig } from './config';
+import { connect } from './db';
 
-const { notion } = require('./config');
+module.exports = { markAsSynced };
 
-module.exports = {
-  markAsSynced: async (pageId) => {
-    try {
-      await notion.pages.update({
-        page_id: pageId,
-        properties: {
-          synced: { checkbox: true },
-        },
-      });
-    } catch (error) {
-      console.log(error.message);
-    }
-  },
+const markAsSynced = async (id) => {
+  const { database_collection } = await userConfig();
+  const db = await connect();
+  const collection = db.collection(database_collection);
+
+  try {
+    await collection.updateOne({ id }, { $set: { synced: true } });
+  } catch (error) {
+    console.log(error.message);
+  }
 };

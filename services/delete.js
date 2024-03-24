@@ -1,15 +1,16 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-undef */
+import { userConfig } from './config';
+import { connect } from './db';
 
-const { notion } = require('./config');
+module.exports = { deleteTask };
 
-module.exports = {
-  deleteAdhocOrTask: async (id) => {
-    try {
-      return await notion.pages.update({ page_id: id, archived: true });
-    } catch (error) {
-      console.log(error.message);
-    }
-  },
+const deleteTask = async (id) => {
+  try {
+    const { database_collection } = await userConfig();
+    const db = await connect();
+    const collection = db.collection(database_collection);
+
+    await collection.deleteOne({ id });
+  } catch (error) {
+    console.log(error.message);
+  }
 };

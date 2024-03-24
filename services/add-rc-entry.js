@@ -1,19 +1,16 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-var-requires */
+import fs from 'fs';
+import os from 'os';
+import { execSync } from 'child_process';
 
-const fs = require('fs');
-const os = require('os');
-const { execSync } = require('child_process');
-const processOs = process.platform;
 const currentPath = process.cwd();
 const entryToAdd = `alias time='${currentPath}/services/command.js'`;
 
 function getRcPath() {
   let rcPath = '';
 
-  if (processOs === 'darwin') {
+  if (process.platform === 'darwin') {
     rcPath = `${os.homedir()}/.zshrc`;
-  } else if (processOs === 'linux') {
+  } else if (process.platform === 'linux') {
     rcPath = `${os.homedir()}/.bashrc`;
   }
 

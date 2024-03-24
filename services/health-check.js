@@ -1,7 +1,5 @@
-/* eslint-disable no-undef */
-/* eslint-disable @typescript-eslint/no-var-requires */
+import { execSync } from 'child_process';
 
-const { execSync } = require('child_process');
 const os = process.platform;
 const containerName = 'mongodb';
 
