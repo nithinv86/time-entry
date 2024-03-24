@@ -1,6 +1,6 @@
-import { format, subDays } from 'date-fns';
-import { userConfig } from './config';
-import { connect } from './db';
+const { format, subDays } = require('date-fns');
+const { userConfig } = require('./config');
+const { connect } = require('./db');
 
 module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };
 

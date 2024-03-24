@@ -1,5 +1,5 @@
-import { userConfig } from './config';
-import { connect } from './db';
+const { userConfig } = require('./config');
+const { connect } = require('./db');
 
 module.exports = { deleteTask };
 

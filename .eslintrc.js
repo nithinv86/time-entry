@@ -22,5 +22,8 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint'],
-  rules: { '@typescript-eslint/no-unsafe-optional-chain': 'off' },
+  rules: {
+    '@typescript-eslint/no-unsafe-optional-chain': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+  },
 };

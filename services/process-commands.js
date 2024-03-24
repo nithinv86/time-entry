@@ -1,12 +1,12 @@
-import { checkConfig } from './init-config';
-import { dockerHealthCheck, containerHealthCheck } from './health-check';
-import { removeEmpty } from './utils';
-import { getStatus, getTasksByDate } from './get-report';
-import { logTaskHoursAndSync } from './log-task-hours-and-sync';
-import { addNewTask } from './add-task';
-import { updateTaskDetails } from './update';
-import { getSprints } from './get-sprints';
-import { getZohoTasks } from './get-zoho-tasks';
+const { checkConfig } = require('./init-config');
+const { dockerHealthCheck, containerHealthCheck } = require('./health-check');
+const { removeEmpty } = require('./utils');
+const { getStatus, getTasksByDate } = require('./get-report');
+const { logTaskHoursAndSync } = require('./log-task-hours-and-sync');
+const { addNewTask } = require('./add-task');
+const { updateTaskDetails } = require('./update');
+const { getSprints } = require('./get-sprints');
+const { getZohoTasks } = require('./get-zoho-tasks');
 
 module.exports = { processArgs };
 

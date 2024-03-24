@@ -1,11 +1,27 @@
-import fs from 'fs';
-import os from 'os';
-import { execSync } from 'child_process';
+const fs = require('fs');
+const os = require('os');
+const { execSync } = require('child_process');
+const addBashrcEntry = (entryToAdd) => {
+  const rcPath = getRcPath();
+  const prefix = '### time-tracker aliases ###';
 
-const currentPath = process.cwd();
-const entryToAdd = `alias time='${currentPath}/services/command.js'`;
+  fs.appendFileSync(rcPath, `\n${prefix}\n${entryToAdd}\n`);
+  execSync(`bash -c "source ${rcPath}"`);
 
-function getRcPath() {
+  console.log(`Entry "${entryToAdd}" added`);
+};
+const checkBashrcEntry = (entryToAdd) => {
+  const rcPath = getRcPath();
+
+  if (!fs.existsSync(rcPath)) {
+    return true;
+  }
+
+  const bashrcContent = fs.readFileSync(rcPath, 'utf8');
+
+  return bashrcContent.includes(entryToAdd);
+};
+const getRcPath = () => {
   let rcPath = '';
 
   if (process.platform === 'darwin') {
@@ -15,27 +31,6 @@ function getRcPath() {
   }
 
   return rcPath;
-}
-
-module.exports = {
-  checkBashrcEntry: () => {
-    const rcPath = getRcPath();
-
-    if (!fs.existsSync(rcPath)) {
-      return true;
-    }
-
-    const bashrcContent = fs.readFileSync(rcPath, 'utf8');
-
-    return bashrcContent.includes(entryToAdd);
-  },
-  addBashrcEntry: () => {
-    const rcPath = getRcPath();
-    const prefix = '### time-tracker aliases ###';
-
-    fs.appendFileSync(rcPath, `\n${prefix}\n${entryToAdd}\n`);
-    execSync(`bash -c "source ${rcPath}"`);
-
-    console.log(`Entry "${entryToAdd}" added`);
-  },
 };
+
+module.exports = { addBashrcEntry, checkBashrcEntry, getRcPath };
