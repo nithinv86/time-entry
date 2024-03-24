@@ -1,5 +1,5 @@
 {
-  "name": "@mails2nithin/zoho-time-entry",
+  "name": "zoho-time-entry",
   "version": "0.1.0",
   "description": "Zoho time entry cli",
   "main": "index.js",
