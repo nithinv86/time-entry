@@ -1,11 +1,11 @@
-# Zoho time entry
+# Nithin's time entry
 
 <a name="readme-top"></a>
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://gitlab.com/nithinv86/zoho-time-entry">
+  <a href="https://gitlab.com/nithinv86/time-entry">
     <img src="./favicon.png" alt="Logo" width="80" height="80">
   </a>
 </div>
@@ -33,9 +33,9 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About Zoho time entry
+## About time entry
 
-If you find yourself grappling with Zoho's time entry system, fret not! There's a straightforward and effective alternative method available to help you effortlessly track and update your time.
+If you find yourself grappling with work time entry system, fret not! There's a straightforward and effective alternative method available to help you effortlessly track and update your time.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -43,7 +43,7 @@ If you find yourself grappling with Zoho's time entry system, fret not! There's 
 
 ## Getting Started
 
-Simply run `npm install @mails2nithin/zoho-time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
+Simply run `npm install @mails2nithin/time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
 
 ### Prerequisites
 
@@ -142,10 +142,10 @@ This project is distributed under the MIT License. See `LICENSE.txt` for more in
 
 ## Contact
 
-If you have any questions or suggestions regarding the Zoho time entry, feel free to reach out to Nithin V:
+If you have any questions or suggestions regarding the Time entry, feel free to reach out to Nithin V:
 
 - Email: mails2nithin@gmail.com
 
-Project Link: [https://gitlab.com/nithinv86/zoho-time-entry](https://gitlab.com/nithinv86/zoho-time-entry)
+Project Link: [https://gitlab.com/nithinv86/time-entry](https://gitlab.com/nithinv86/time-entry)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

@@ -2,10 +2,14 @@ const { MongoClient } = require('mongodb');
 const { userConfig } = require('./config');
 const connect = async () => {
   const { db } = await userConfig();
-  let uri = 'mongodb://';
+  let uri = '';
 
-  if (db.user) {
-    uri += `${db.user}:${db.password}@`;
+  if (db.host.startsWith('localhost')) {
+    uri = 'mongodb://';
+
+    if (db.user) {
+      uri += `${db.user}:${db.password}@`;
+    }
   }
 
   uri += `${db.host}/${db.name}`;

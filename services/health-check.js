@@ -33,7 +33,7 @@ const dockerHealthCheck = async () => {
 const containerHealthCheck = async () => {
   try {
     const containerStatus = execSync(
-      `sudo docker inspect -f '{{.State.Running}}' ${containerName} 2>/dev/null`,
+      `docker inspect -f '{{.State.Running}}' ${containerName} 2>/dev/null`,
     )
       .toString()
       .trim();

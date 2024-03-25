@@ -1,6 +1,6 @@
 {
-  "name": "time-entry",
-  "version": "0.0.2-0",
+  "name": "@nithin/time-entry",
+  "version": "0.0.0",
   "description": "Nithin time entry cli",
   "main": "index.js",
   "bin": {
