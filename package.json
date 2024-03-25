@@ -3,6 +3,9 @@
   "version": "0.0.1-0",
   "description": "Nithin time entry cli",
   "main": "index.js",
+  "bin": {
+    "time": "./index.js"
+  },
   "scripts": {
     "start": "node index",
     "start:dev": "nodemon index",
@@ -31,6 +34,7 @@
   "homepage": "https://gitlab.com/nithinv86/nithin-time-entry#readme",
   "dependencies": {
     "axios": "~1.6.8",
+    "chalk": "~4.1.2",
     "compression": "~1.7.4",
     "date-fns": "~2.30.0",
     "date-fns-tz": "~2.0.1",

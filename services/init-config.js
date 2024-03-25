@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const fs = require('fs');
 const { filePath, rl } = require('./config');
 const questions = [
@@ -17,13 +18,16 @@ const questions = [
 ];
 let answers = { user: {}, zoho: {}, db: {} };
 const init = async () => {
-  console.log('%cWelcome to Zoho Time Entry CLI!', 'color:green');
+  console.log(
+    chalk.blueBright.bold('Welcome to Nithin Time Entry CLI app! ... '),
+    chalk.blue('⏳ '),
+  );
 
   getConfigDetails(0);
 };
 const getConfigDetails = (index) => {
   if (!index) {
-    console.log('Answer the following questions:');
+    console.log(chalk.yellow('Please respond to the following configuration inquiries.'));
   }
 
   if (index >= questions.length) {
@@ -32,7 +36,7 @@ const getConfigDetails = (index) => {
         throw err;
       }
 
-      console.log('Thanks for your time!');
+      console.log(chalk.yellow('Thanks for your time!'), chalk.blue('⏳ '));
     });
 
     rl.close();
@@ -42,7 +46,7 @@ const getConfigDetails = (index) => {
 
   const { parent, key, label } = questions[index];
 
-  rl.question(`${label} : `, (userInput) => {
+  rl.question(`${label}: `, (userInput) => {
     answers[parent][key] = userInput;
 
     getConfigDetails(index + 1);
@@ -52,7 +56,7 @@ const checkConfig = async () => {
   return new Promise((resolve) => {
     fs.access(filePath, fs.constants.F_OK, (err) => {
       if (err) {
-        console.log('Configurations are missing');
+        console.log(chalk.red('Configurations are missing'));
         getConfigDetails(0);
       } else {
         fs.readFile(filePath, 'utf8', (err, data) => {
