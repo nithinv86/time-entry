@@ -75,19 +75,19 @@ After creating the Docker container, you can utilize the app with the following 
 - To check the Docker and container status, use the command:
 
   ```sh
-  ntime health
+  time health
   ```
 
 - To retrieve the time entries for the last week, use the command:
 
   ```sh
-  ntime status
+  time status
   ```
 
 - To retrieve time entries for a specific period, specify the start and end dates in the format `yyyy-mm-dd` using the following command:
 
   ```sh
-  ntime status -f <start_date> -t <end_date>
+  time status -f <start_date> -t <end_date>
   ```
 
   Ensure to replace `<start_date>` and `<end_date>` with the desired dates in the specified format. This will allow you to effectively manage and track your time entries using the app within the Docker container.
@@ -95,19 +95,19 @@ After creating the Docker container, you can utilize the app with the following 
 - To add a time entry, use either of the following commands:
 
   ```sh
-  ntime add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
+  time add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
   ```
 
   or
 
   ```sh
-  ntime add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
+  time add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
   ```
 
 - To update a time entry, use the following command:
 
   ```sh
-  ntime update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
+  time update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
   ```
 
   Ensure that the ID is mandatory and the rest of the fields are optional.
