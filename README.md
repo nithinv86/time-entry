@@ -144,7 +144,6 @@ This project is distributed under the MIT License. See `LICENSE.txt` for more in
 
 If you have any questions or suggestions regarding the Zoho time entry, feel free to reach out to Nithin V:
 
-- Twitter: [@nithin_v86](https://twitter.com/Nithin_V86)
 - Email: mails2nithin@gmail.com
 
 Project Link: [https://gitlab.com/nithinv86/zoho-time-entry](https://gitlab.com/nithinv86/zoho-time-entry)

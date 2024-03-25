@@ -19,7 +19,7 @@ const questions = [
 let answers = { user: {}, zoho: {}, db: {} };
 const init = async () => {
   console.log(
-    chalk.blueBright.bold('Welcome to Nithin Time Entry CLI app! ... '),
+    chalk.blueBright.bold("Welcome to Nithin's Time Entry CLI app! ... "),
     chalk.blue('⏳ '),
   );
 
