@@ -3,7 +3,7 @@ const os = require('os');
 const { execSync } = require('child_process');
 const addBashrcEntry = (entryToAdd) => {
   const rcPath = getRcPath();
-  const prefix = '### time-tracker aliases ###';
+  const prefix = '### time-entry aliases ###';
 
   fs.appendFileSync(rcPath, `\n${prefix}\n${entryToAdd}\n`);
   execSync(`bash -c "source ${rcPath}"`);

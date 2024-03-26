@@ -1,7 +1,9 @@
 const axios = require('axios');
 const { getSprints } = require('./get-sprints');
-const { headers, userId } = require('./config');
+const { getHeaders, userId } = require('./config');
 const getZohoTasks = async ({ params }) => {
+  const headers = await getHeaders();
+
   if (!params?.sprint) {
     if (params?.type) {
       if (typeof params.type === 'string') {

@@ -1,11 +1,11 @@
-# Zoho time entry
+# Nithin's time entry
 
 <a name="readme-top"></a>
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://gitlab.com/nithinv86/zoho-time-entry">
+  <a href="https://gitlab.com/nithinv86/time-entry">
     <img src="./favicon.png" alt="Logo" width="80" height="80">
   </a>
 </div>
@@ -33,9 +33,9 @@
 
 <!-- ABOUT THE PROJECT -->
 
-## About Zoho time entry
+## About time entry
 
-If you find yourself grappling with Zoho's time entry system, fret not! There's a straightforward and effective alternative method available to help you effortlessly track and update your time.
+If you find yourself grappling with work time entry system, fret not! There's a straightforward and effective alternative method available to help you effortlessly track and update your time.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -43,7 +43,7 @@ If you find yourself grappling with Zoho's time entry system, fret not! There's 
 
 ## Getting Started
 
-Simply run `npm install @mails2nithin/zoho-time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
+Simply run `npm install -g @mails2nithin/time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
 
 ### Prerequisites
 
@@ -75,19 +75,19 @@ After creating the Docker container, you can utilize the app with the following 
 - To check the Docker and container status, use the command:
 
   ```sh
-  ztime health
+  time health
   ```
 
 - To retrieve the time entries for the last week, use the command:
 
   ```sh
-  ztime status
+  time status
   ```
 
 - To retrieve time entries for a specific period, specify the start and end dates in the format `yyyy-mm-dd` using the following command:
 
   ```sh
-  ztime status -f <start_date> -t <end_date>
+  time status -f <start_date> -t <end_date>
   ```
 
   Ensure to replace `<start_date>` and `<end_date>` with the desired dates in the specified format. This will allow you to effectively manage and track your time entries using the app within the Docker container.
@@ -95,19 +95,19 @@ After creating the Docker container, you can utilize the app with the following 
 - To add a time entry, use either of the following commands:
 
   ```sh
-  ztime add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
+  time add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
   ```
 
   or
 
   ```sh
-  ztime add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
+  time add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
   ```
 
 - To update a time entry, use the following command:
 
   ```sh
-  ztime update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
+  time update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
   ```
 
   Ensure that the ID is mandatory and the rest of the fields are optional.
@@ -142,11 +142,10 @@ This project is distributed under the MIT License. See `LICENSE.txt` for more in
 
 ## Contact
 
-If you have any questions or suggestions regarding the Zoho time entry, feel free to reach out to Nithin V:
+If you have any questions or suggestions regarding the Time entry, feel free to reach out to Nithin V:
 
-- Twitter: [@nithin_v86](https://twitter.com/Nithin_V86)
 - Email: mails2nithin@gmail.com
 
-Project Link: [https://gitlab.com/nithinv86/zoho-time-entry](https://gitlab.com/nithinv86/zoho-time-entry)
+Project Link: [https://gitlab.com/nithinv86/time-entry](https://gitlab.com/nithinv86/time-entry)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
