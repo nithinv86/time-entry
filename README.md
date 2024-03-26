@@ -43,7 +43,7 @@ If you find yourself grappling with work time entry system, fret not! There's a 
 
 ## Getting Started
 
-Simply run `npm install @mails2nithin/time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
+Simply run `npm install -g @mails2nithin/time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
 
 ### Prerequisites
 

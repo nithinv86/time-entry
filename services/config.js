@@ -25,7 +25,7 @@ const userConfig = async () => {
     });
   });
 };
-const headers = async () => {
+const getHeaders = async () => {
   const { zoho } = await userConfig();
 
   return {
@@ -72,4 +72,4 @@ const keyMap = {
   id: 'id',
 };
 
-module.exports = { filePath, rl, keyMap, headers, userConfig };
+module.exports = { filePath, rl, keyMap, getHeaders, userConfig };
