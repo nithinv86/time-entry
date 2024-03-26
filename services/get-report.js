@@ -91,7 +91,7 @@ const getStatus = async (values) => {
     data.to = format(new Date(), 'yyyy-MM-dd');
   }
 
-  console.log(await getReport(data.from, data.to));
+  console.table(await getReport(data.from, data.to));
 };
 
 module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };

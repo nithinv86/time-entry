@@ -5,7 +5,7 @@ const { getTasksBySynced } = require('./get-report');
 const { getSprints } = require('./get-sprints');
 const { getZohoTasks } = require('./get-zoho-tasks');
 const { markAsSynced } = require('./mark-as-synced');
-const { headers, userId } = require('./config');
+const { getHeaders, userId } = require('./config');
 const logTaskHoursAndSync = async (project = '139011000000148327') => {
   const [tasks, zohoTasks, activeSprint] = await Promise.all([
     getTasksBySynced(),
@@ -13,6 +13,7 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
     getSprints({ params: { type: '2' } }),
   ]);
   const response = { success: 0, failed: 0, total: 0 };
+  const headers = await getHeaders();
 
   for (const task of tasks) {
     const zohoTask = zohoTasks.find(({ taskId }) => {

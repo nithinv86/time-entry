@@ -7,6 +7,8 @@ const { addNewTask } = require('./add-task');
 const { updateTaskDetails } = require('./update');
 const { getSprints } = require('./get-sprints');
 const { getZohoTasks } = require('./get-zoho-tasks');
+const { getProjects } = require('./get-zoho-projects');
+const { filterCalls } = require('./filter');
 const processArgs = async (type, value) => {
   try {
     await checkConfig();
@@ -77,6 +79,20 @@ const processArgs = async (type, value) => {
         }
 
         console.log(await getTasksByDate());
+
+        break;
+      }
+
+      case 'filter': {
+        if (values) {
+          await filterCalls(values);
+        }
+
+        break;
+      }
+
+      case 'project': {
+        console.log(await getProjects());
 
         break;
       }
