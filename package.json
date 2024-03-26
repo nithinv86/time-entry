@@ -1,6 +1,6 @@
 {
   "name": "@mails2nithin/time-entry",
-  "version": "0.0.4-0",
+  "version": "0.0.5-0",
   "description": "Nithin time entry cli",
   "main": "index.js",
   "bin": {
@@ -9,7 +9,6 @@
   "scripts": {
     "start": "node index",
     "start:dev": "nodemon index",
-    "postinstall": "./post-install.js",
     "test": "npm run test",
     "lint": "eslint \"{services,public}/**/*.js\" --fix",
     "prettier": "prettier \"{services,public}/**/*.(html|scss|json|js)\" --write"
