@@ -1,39 +1,14 @@
+const fs = require('fs');
 const { keyMap } = require('./config');
-const removeEmpty = (obj) => {
-  for (let [key, val] of Object.entries(obj)) {
-    if (val && typeof val === 'object') {
-      this.removeEmpty(val);
-
-      if (!(Object.keys(val).length || val instanceof Date)) {
-        delete obj[key];
-      }
-    } else {
-      if (typeof val === 'string') {
-        val = val.trim();
-      }
-
-      if (val === null || val === undefined || val === '') {
-        delete obj[key];
-      } else {
-        obj[key] = val;
-      }
-    }
-  }
-
-  return obj;
+const accessFile = (path, callback) => {
+  fs.access(path, fs.constants.F_OK, callback());
 };
-const groupBy = (arr, key) => {
-  return arr.reduce((acc, obj) => {
-    const group = obj[key];
-
-    if (!acc[group]) {
-      acc[group] = [];
-    }
-
-    acc[group].push(obj);
-
-    return acc;
-  }, {});
+const appendFileSync = (path, data) => {
+  try {
+    fs.appendFileSync(path, data);
+  } catch (error) {
+    console.log(error);
+  }
 };
 const convertToTaskData = (values) => {
   return values.reduce((acc, item) => {
@@ -80,5 +55,67 @@ const convertToTaskData = (values) => {
     return acc;
   }, {});
 };
+const existsSync = (path) => {
+  return fs.existsSync(path);
+};
+const groupBy = (arr, key) => {
+  return arr.reduce((acc, obj) => {
+    const group = obj[key];
 
-module.exports = { convertToTaskData, groupBy, removeEmpty };
+    if (!acc[group]) {
+      acc[group] = [];
+    }
+
+    acc[group].push(obj);
+
+    return acc;
+  }, {});
+};
+const readFileSync = (path) => {
+  try {
+    return fs.readFileSync(path, 'utf8');
+  } catch (error) {
+    console.log(error);
+  }
+};
+const removeEmpty = (obj) => {
+  for (let [key, val] of Object.entries(obj)) {
+    if (val && typeof val === 'object') {
+      this.removeEmpty(val);
+
+      if (!(Object.keys(val).length || val instanceof Date)) {
+        delete obj[key];
+      }
+    } else {
+      if (typeof val === 'string') {
+        val = val.trim();
+      }
+
+      if (val === null || val === undefined || val === '') {
+        delete obj[key];
+      } else {
+        obj[key] = val;
+      }
+    }
+  }
+
+  return obj;
+};
+const writeFileSync = (path, data) => {
+  try {
+    fs.writeFileSync(path, data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+module.exports = {
+  accessFile,
+  appendFileSync,
+  convertToTaskData,
+  existsSync,
+  groupBy,
+  readFileSync,
+  removeEmpty,
+  writeFileSync,
+};

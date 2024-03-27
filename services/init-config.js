@@ -1,6 +1,6 @@
 const chalk = require('chalk');
-const fs = require('fs');
 const { filePath, rl } = require('./config');
+const { writeFileSync, accessFile, readFileSync } = require('./utils');
 const questions = [
   { parent: 'user', key: 'name', label: 'Your name' },
   { parent: 'user', key: 'email', label: 'email address' },
@@ -31,14 +31,8 @@ const getConfigDetails = (index) => {
   }
 
   if (index >= questions.length) {
-    fs.writeFile(filePath, JSON.stringify(answers), (err) => {
-      if (err) {
-        throw err;
-      }
-
-      console.log(chalk.yellow('Thanks for your time!'), chalk.blue('⏳ '));
-    });
-
+    writeFileSync(filePath, JSON.stringify(answers));
+    console.log(chalk.yellow('Thanks for your time!'), chalk.blue('⏳ '));
     rl.close();
 
     return;
@@ -54,20 +48,16 @@ const getConfigDetails = (index) => {
 };
 const checkConfig = async () => {
   return new Promise((resolve) => {
-    fs.access(filePath, fs.constants.F_OK, (err) => {
+    accessFile(filePath, (err) => {
       if (err) {
         console.log(chalk.red('Configurations are missing'));
         getConfigDetails(0);
       } else {
-        fs.readFile(filePath, 'utf8', (err, data) => {
-          if (err) {
-            throw err;
-          }
+        const data = readFileSync(filePath);
 
-          answers = JSON.parse(data);
+        answers = JSON.parse(data);
 
-          resolve();
-        });
+        resolve(answers);
       }
     });
   });

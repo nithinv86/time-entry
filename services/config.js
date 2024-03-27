@@ -1,28 +1,23 @@
-const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const readline = require('readline');
+const { readFileSync } = require('./utils');
 const userHomeDir = os.homedir();
 const filePath = path.join(userHomeDir, '.zoho-config');
 const userConfig = async () => {
   return new Promise((resolve, reject) => {
-    fs.readFile(filePath, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        try {
-          const jsonData = JSON.parse(data);
+    try {
+      const data = readFileSync(filePath);
+      const jsonData = JSON.parse(data);
 
-          if (!Object.values(jsonData).length) {
-            throw new Error('No configurations found, try `zoho init` as first step.');
-          }
-
-          resolve(jsonData);
-        } catch (parseError) {
-          reject(parseError);
-        }
+      if (!Object.values(jsonData).length) {
+        throw new Error('No configurations found, try `zoho init` as first step.');
       }
-    });
+
+      resolve(jsonData);
+    } catch (parseError) {
+      reject(parseError);
+    }
   });
 };
 const getHeaders = async () => {
