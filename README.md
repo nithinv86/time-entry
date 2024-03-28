@@ -57,25 +57,14 @@ Open your terminal and execute the command mentioned BELOW to install or update 
 npm install npm@latest -g
 ```
 
-- Docker:
-
-Click on the provided link to access the Docker installation guide. Follow the instructions specific to your operating system to download and install Docker. ([Read more](https://docs.docker.com/engine/install/))
-
-- MongoDB:
-
-Visit the MongoDB website using the provided link. ([Read more](https://www.mongodb.com/))
-Sign up for an account if you don't have one already. Follow the registration process.
-Once registered, you can access Notion via your web browser or download the desktop or mobile app for a more streamlined experience.
-Ensure that all required software is properly installed and configured to use the software effectively.
-
 ### Commands
 
 After creating the Docker container, you can utilize the app with the following commands:
 
-- To check the Docker and container status, use the command:
+- To initialize, execute the following command and input the necessary information when prompted.:
 
   ```sh
-  time health
+  time init
   ```
 
 - To retrieve the time entries for the last week, use the command:
@@ -92,7 +81,7 @@ After creating the Docker container, you can utilize the app with the following 
 
   Ensure to replace `<start_date>` and `<end_date>` with the desired dates in the specified format. This will allow you to effectively manage and track your time entries using the app within the Docker container.
 
-- To add a time entry, use either of the following commands:
+- To add a time entry, use either of the following commands: (Optional fields include `project name` and `sprint`)
 
   ```sh
   time add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
@@ -104,7 +93,7 @@ After creating the Docker container, you can utilize the app with the following 
   time add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
   ```
 
-- To update a time entry, use the following command:
+- To update a time entry, use the following command: (Optional fields include `project name` and `sprint`)
 
   ```sh
   time update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>

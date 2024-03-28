@@ -1,11 +1,11 @@
-const fs = require('fs');
 const os = require('os');
 const { execSync } = require('child_process');
+const { appendFileSync, existsSync, readFileSync } = require('./utils');
 const addBashrcEntry = (entryToAdd) => {
   const rcPath = getRcPath();
   const prefix = '### time-entry aliases ###';
 
-  fs.appendFileSync(rcPath, `\n${prefix}\n${entryToAdd}\n`);
+  appendFileSync(rcPath, `\n${prefix}\n${entryToAdd}\n`);
   execSync(`bash -c "source ${rcPath}"`);
 
   console.log(`Entry "${entryToAdd}" added`);
@@ -13,11 +13,11 @@ const addBashrcEntry = (entryToAdd) => {
 const checkBashrcEntry = (entryToAdd) => {
   const rcPath = getRcPath();
 
-  if (!fs.existsSync(rcPath)) {
+  if (!existsSync(rcPath)) {
     return true;
   }
 
-  const bashrcContent = fs.readFileSync(rcPath, 'utf8');
+  const bashrcContent = readFileSync(rcPath);
 
   return bashrcContent.includes(entryToAdd);
 };

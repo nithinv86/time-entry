@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-const { init } = require('./services/init-config');
+const { init, switchDefaultProject } = require('./services/init-config');
 const { processArgs } = require('./services/process-commands');
-const { containerHealthCheck, dockerHealthCheck } = require('./services/health-check');
 const initNpm = async () => {
   const [type, ...value] = (process.argv || []).splice(2);
 
@@ -14,9 +13,9 @@ const initNpm = async () => {
 
   if (type === 'init') {
     init();
+  } else if (type === 'switch project') {
+    switchDefaultProject();
   } else {
-    await dockerHealthCheck();
-    await containerHealthCheck();
     processArgs(type, value?.join(' '));
   }
 };

@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getHeaders } = require('./config');
+const { getHeaders } = require('./utils');
 const getSprints = async ({ params }) => {
   const headers = await getHeaders();
   const p = {
