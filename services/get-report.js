@@ -1,35 +1,66 @@
-const { format, subDays } = require('date-fns');
-const { userConfig } = require('./config');
-const { connect } = require('./db');
+const {
+  contentTableHeading,
+  contentTableSeparator,
+  path,
+  readFileSync,
+  userHomeDir,
+  removeEmpty,
+} = require('./utils');
 const getTasksByDate = async (from, to) => {
   try {
-    const { db: database } = await userConfig();
-    const db = await connect();
-    const collection = db.collection(database.collection);
-
     if (!from) {
-      from = subDays(new Date(), 7);
+      from = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0];
     }
 
     if (!to) {
       to = new Date();
     }
 
-    const $gte = new Date(from).toISOString();
-    const $lte = new Date(to).toISOString();
+    let data = [];
+    let startDate = new Date(from);
+    const itemHeading = contentTableHeading.split('|').reduce((acc, val) => {
+      const item = val.trim();
+      if (item && item !== '--') {
+        acc.push(item);
+      }
+      return acc;
+    }, []);
 
-    return await collection.find({ date: { $gte, $lte } }).toArray();
+    while (startDate <= new Date(to)) {
+      const stringDate = startDate.toISOString().split('T')[0];
+      const item = readFileSync(path.join(userHomeDir, `.${stringDate}`));
+
+      if (item) {
+        const timeEntries = removeEmpty(item.split(contentTableSeparator)[1].split('\n'));
+
+        data = data.concat(
+          timeEntries.map((entry) =>
+            entry.split('|').reduce((acc, val, i) => {
+              const item = val.trim();
+
+              if (item && item !== '--') {
+                acc[itemHeading[i - 1]] = item;
+              }
+
+              return acc;
+            }, {}),
+          ),
+        );
+      }
+
+      startDate.setDate(startDate.getDate() + 1);
+    }
+
+    return data.filter((item) => item);
   } catch (error) {
     console.error(error.message);
   }
 };
-const getTasksBySynced = async (synced = false) => {
+const getTasksBySynced = async (synced = 'false') => {
   try {
-    const { db: database } = await userConfig();
-    const db = await connect();
-    const collection = db.collection(database.collection);
+    const resp = await getTasksByDate();
 
-    return await collection.find({ synced }).toArray();
+    return (resp || []).filter((item) => item.synced === synced);
   } catch (error) {
     console.error(error.message);
   }
@@ -37,10 +68,9 @@ const getTasksBySynced = async (synced = false) => {
 const getReport = async (from, to) => {
   try {
     const resp = await getTasksByDate(from, to);
+    const adhocTasks = ['adhoc', 'internal', 'internal'];
 
-    return (resp || []).reduce((res, { date, task, synced, duration }) => {
-      date = format(new Date(date), 'yyyy-MM-dd');
-
+    return (resp || []).reduce((res, { date, work, synced, duration }) => {
       res[date] = {
         synced: res[date]?.synced || 0,
         open: res[date]?.open || 0,
@@ -48,16 +78,16 @@ const getReport = async (from, to) => {
         adhoc: res[date]?.adhoc || 0,
       };
 
-      if (synced) {
-        res[date].synced += duration;
+      if (synced === 'true') {
+        res[date].synced += +duration;
       } else {
-        res[date].open += duration;
+        res[date].open += +duration;
       }
 
-      if (task === 'Adhoc' || task === 'Internal connects' || task === 'Internal connect') {
-        res[date].adhoc += duration;
+      if (adhocTasks.includes(work.toLowerCase())) {
+        res[date].adhoc += +duration;
       } else {
-        res[date].task += duration;
+        res[date].task += +duration;
       }
 
       return res;
@@ -84,11 +114,11 @@ const getStatus = async (values) => {
         key = key.substring(1);
       }
 
-      data[keyMap[key]] = format(new Date(itemValue), 'yyyy-MM-dd');
+      data[keyMap[key]] = new Date(itemValue).toISOString().split('T')[0];
     }
   } else {
-    data.from = format(new Date(new Date().setDate(new Date().getDate() - 7)), 'yyyy-MM-dd');
-    data.to = format(new Date(), 'yyyy-MM-dd');
+    data.from = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0];
+    data.to = new Date().toISOString().split('T')[0];
   }
 
   console.table(await getReport(data.from, data.to));

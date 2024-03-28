@@ -1,14 +1,11 @@
 const { checkConfig } = require('./init-config');
-const { dockerHealthCheck, containerHealthCheck } = require('./health-check');
-const { removeEmpty } = require('./utils');
+const { getProjects, getSprints, removeEmpty } = require('./utils');
 const { getStatus, getTasksByDate } = require('./get-report');
 const { logTaskHoursAndSync } = require('./log-task-hours-and-sync');
 const { addNewTask } = require('./add-task');
-const { updateTaskDetails } = require('./update');
-const { getSprints } = require('./get-sprints');
 const { getZohoTasks } = require('./get-zoho-tasks');
-const { getProjects } = require('./get-zoho-projects');
 const { filterCalls } = require('./filter');
+const { markAllAsSynced, updateTask, deleteTask } = require('./update-delete-task');
 const processArgs = async (type, value) => {
   try {
     await checkConfig();
@@ -16,13 +13,6 @@ const processArgs = async (type, value) => {
     const values = value ? removeEmpty(value?.split(' -')) : value;
 
     switch (type) {
-      case 'health': {
-        await dockerHealthCheck();
-        await containerHealthCheck();
-
-        break;
-      }
-
       case 'status': {
         await getStatus(values);
 
@@ -42,7 +32,7 @@ const processArgs = async (type, value) => {
       }
 
       case 'update': {
-        await updateTaskDetails(values);
+        await updateTask(values);
 
         break;
       }
@@ -93,6 +83,18 @@ const processArgs = async (type, value) => {
 
       case 'project': {
         console.log(await getProjects());
+
+        break;
+      }
+
+      case 'delete': {
+        console.log(await deleteTask(values));
+
+        break;
+      }
+
+      case 'markAllAsSynced': {
+        console.log(await markAllAsSynced(['1711633143990'], '2024-03-28'));
 
         break;
       }

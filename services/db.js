@@ -1,5 +1,5 @@
 const { MongoClient } = require('mongodb');
-const { userConfig } = require('./config');
+const { userConfig } = require('./utils');
 const connect = async () => {
   const { db } = await userConfig();
   let uri = '';

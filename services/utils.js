@@ -1,7 +1,40 @@
+const axios = require('axios');
+const os = require('os');
+const path = require('path');
+const readline = require('readline');
 const fs = require('fs');
-const { keyMap } = require('./config');
-const accessFile = (path, callback) => {
-  fs.access(path, fs.constants.F_OK, callback());
+
+const userHomeDir = `${os.homedir()}/.time-entry`;
+const filePath = path.join(userHomeDir, '.zoho-config');
+const keyMap = {
+  p: 'project',
+  project: 'project',
+  s: 'sprint',
+  sprint: 'sprint',
+  t: 'task',
+  task: 'task',
+  dt: 'date',
+  date: 'date',
+  w: 'work',
+  work: 'work',
+  du: 'duration',
+  duration: 'duration',
+  r: 'remarks',
+  remarks: 'remarks',
+  id: 'id',
+};
+const contentTableHeading =
+  '| id | project | sprint | date | task | work | duration | remarks | synced |';
+const contentTableSeparator = '| -- | -- | -- | -- | -- | -- | -- | -- | -- |';
+
+const accessFileSync = (path) => {
+  try {
+    fs.accessSync(path, fs.constants.R_OK | fs.constants.W_OK);
+
+    return true;
+  } catch {
+    return false;
+  }
 };
 const appendFileSync = (path, data) => {
   try {
@@ -10,8 +43,12 @@ const appendFileSync = (path, data) => {
     console.log(error);
   }
 };
-const convertToTaskData = (values) => {
-  return values.reduce((acc, item) => {
+const convertToTaskData = async (values) => {
+  const [{ project }, sprint] = await Promise.all([
+    userConfig(),
+    getSprints({ params: { type: '2' } }),
+  ]);
+  const data = values.reduce((acc, item) => {
     let [key, ...itemValues] = item.split(' ');
     let itemValue = itemValues.join(' ');
 
@@ -33,7 +70,7 @@ const convertToTaskData = (values) => {
 
       case 'dt':
       case 'date': {
-        acc[keyMap[key]] = new Date(itemValue).toISOString();
+        acc[keyMap[key]] = new Date(itemValue).toISOString().split('T')[0];
 
         break;
       }
@@ -54,9 +91,102 @@ const convertToTaskData = (values) => {
 
     return acc;
   }, {});
+
+  if (!data.project) {
+    data.project = project.default.label;
+  }
+
+  if (!data.sprint) {
+    data.sprint = sprint[sprint.length - 1].label;
+  }
+
+  return data;
 };
 const existsSync = (path) => {
   return fs.existsSync(path);
+};
+const getHeaders = async (config) => {
+  if (!config) {
+    config = await userConfig();
+  }
+
+  return {
+    authority: 'externalusers.zohosprints.com',
+    accept: '*/*',
+    'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
+    'cache-control': 'no-cache',
+    cookie: config.zoho.cookie,
+    pragma: 'no-cache',
+    referer: 'https://externalusers.zohosprints.com/workspace/4medica/client/wmoku',
+    'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"macOS"',
+    'sec-fetch-dest': 'empty',
+    'sec-fetch-mode': 'cors',
+    'sec-fetch-site': 'same-origin',
+    'user-agent':
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+    'x-requested-with': 'XMLHttpRequest',
+    'x-za-clientportalid': config.zoho.portalId,
+    'x-za-reqsize': 'large',
+    'x-za-sessionid': config.zoho.sessionId,
+    'x-za-source': config.zoho.source,
+    'x-za-ui-version': 'v2',
+    'x-zcsrf-token': config.zoho.token,
+  };
+};
+const getProjects = async (userConfig) => {
+  const headers = await getHeaders(userConfig);
+  const p = {
+    action: 'recentprojects',
+    team: '803166918',
+  };
+  const parentUrl = `https://externalusers.zohosprints.com/zsapi/team/${p.team}/projects/?action=${p.action}`;
+
+  try {
+    const response = await axios.get(parentUrl, { headers });
+
+    return Object.entries(response.data.projectJObj)
+      .map(([key, value]) => ({ value: key, label: value[0] }))
+      .sort((a, b) => (a.label < b.label ? 1 : a.label > b.label ? -1 : 0));
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+const getSprints = async ({ params }) => {
+  const headers = await getHeaders();
+  const p = {
+    index: params.index || 1,
+    range: params.range || 150,
+    project: params.project || '139011000000148327',
+    action: 'data',
+    team: '803166918',
+  };
+
+  if (params?.type) {
+    if (typeof params.type === 'string') {
+      p.type = params.type.split(',');
+    } else {
+      p.type = params.type;
+    }
+  } else {
+    p.type = ['2', '3'];
+  }
+  const parentUrl = `https://externalusers.zohosprints.com/zsapi/team/${p.team}/projects/${
+    p.project
+  }/sprints/?action=${p.action}&range=${p.range}&type=${encodeURIComponent(
+    JSON.stringify(p.type),
+  )}&index=${p.index}`;
+
+  try {
+    const response = await axios.get(parentUrl, { headers });
+
+    return Object.entries(response.data.sprintJObj)
+      .map(([key, value]) => ({ value: key, label: value[0] }))
+      .sort((a, b) => (a.label < b.label ? 1 : a.label > b.label ? -1 : 0));
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 const groupBy = (arr, key) => {
   return arr.reduce((acc, obj) => {
@@ -71,11 +201,18 @@ const groupBy = (arr, key) => {
     return acc;
   }, {});
 };
+const mkdirSync = () => {
+  try {
+    return fs.mkdirSync(userHomeDir);
+  } catch (error) {
+    console.log(error);
+  }
+};
 const readFileSync = (path) => {
   try {
     return fs.readFileSync(path, 'utf8');
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
 };
 const removeEmpty = (obj) => {
@@ -101,6 +238,25 @@ const removeEmpty = (obj) => {
 
   return obj;
 };
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const userConfig = async (jsonData) => {
+  return new Promise((resolve, reject) => {
+    try {
+      if (!jsonData) {
+        const data = readFileSync(filePath);
+        jsonData = JSON.parse(data);
+      }
+
+      if (!Object.values(jsonData).length) {
+        throw new Error('No configurations found, try `zoho init` as first step.');
+      }
+
+      resolve(jsonData);
+    } catch (parseError) {
+      reject(parseError);
+    }
+  });
+};
 const writeFileSync = (path, data) => {
   try {
     fs.writeFileSync(path, data);
@@ -110,12 +266,23 @@ const writeFileSync = (path, data) => {
 };
 
 module.exports = {
-  accessFile,
+  accessFileSync,
   appendFileSync,
+  contentTableHeading,
+  contentTableSeparator,
   convertToTaskData,
   existsSync,
+  filePath,
+  getHeaders,
+  getProjects,
+  getSprints,
   groupBy,
+  mkdirSync,
+  path,
   readFileSync,
   removeEmpty,
+  rl,
+  userConfig,
+  userHomeDir,
   writeFileSync,
 };

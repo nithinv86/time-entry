@@ -1,6 +1,5 @@
 const axios = require('axios');
-const { getSprints } = require('./get-sprints');
-const { getHeaders, userId } = require('./config');
+const { getHeaders, getSprints, userId } = require('./utils');
 const getZohoTasks = async ({ params }) => {
   const headers = await getHeaders();
 
