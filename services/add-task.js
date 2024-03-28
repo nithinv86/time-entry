@@ -1,46 +1,50 @@
-const { userConfig } = require('./config');
-const { connect } = require('./db');
-const { convertToTaskData } = require('./utils');
-const addTask = async (entry) => {
+const path = require('path');
+const {
+  contentTableHeading,
+  contentTableSeparator,
+  convertToTaskData,
+  readFileSync,
+  accessFileSync,
+  writeFileSync,
+  userHomeDir,
+  appendFileSync,
+} = require('./utils');
+const checkDateEntry = async (date, entryContent) => {
+  const isExists = { file: false, entry: false };
+
   try {
-    const { db: database } = await userConfig();
-    const entries = [];
-    const db = await connect();
-    const collection = db.collection(database.collection);
+    if (accessFileSync(path.join(userHomeDir, `.${date}`))) {
+      const entries = readFileSync(path.join(userHomeDir, `.${date}`));
 
-    if (!collection) {
-      throw new Error('Collection not found');
+      isExists.file = entries.includes(`### ${date}`);
+      isExists.entry = entries.includes(entryContent);
     }
 
-    const existingEntry = await collection.findOne({
-      ...entry,
-      date: new Date(entry.date).toISOString(),
-      duration: +entry.duration,
-    });
-
-    if (existingEntry) {
-      throw new Error('Same entry already exists');
-    }
-
-    entries.push({
-      ...entry,
-      duration: +entry.duration,
-      date: new Date(entry.date).toISOString(),
-      synced: false,
-      createdAt: new Date().toISOString(),
-    });
-
-    const resp = await collection.insertMany(entries);
-
-    console.log(`Inserted ${resp.insertedCount} document into the collection`);
-  } catch (error) {
-    console.error(error.message);
+    return isExists;
+  } catch {
+    return isExists;
   }
 };
 const addNewTask = async (values) => {
-  const data = convertToTaskData(values);
+  const { project, sprint, task, date, work, duration, remarks } = await convertToTaskData(values);
 
-  await addTask(data);
+  try {
+    const entryHeading = `---\ntags: [Time entry task]\ntitle: ${date}\ncreated: ${new Date().toISOString()}\n---\n\n### ${date}\n${contentTableHeading}\n${contentTableSeparator}`;
+    const entryContent = `\n| ${new Date().getTime()} | ${project} | ${sprint} | ${date} | ${task} | ${work} | ${duration} | ${remarks} | false |`;
+    const isExists = await checkDateEntry(date, entryContent);
+
+    if (isExists.file && isExists.entry) {
+      console.log('Same entry already exists');
+    } else if (isExists.file && !isExists.entry) {
+      console.log('New entry added');
+      appendFileSync(path.join(userHomeDir, `.${date}`), `${entryContent}`);
+    } else {
+      console.log('New entry added');
+      writeFileSync(path.join(userHomeDir, `.${date}`), `${entryHeading}${entryContent}`);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-module.exports = { addTask, addNewTask };
+module.exports = { addNewTask };

@@ -2,22 +2,22 @@ const axios = require('axios');
 const { format, addMinutes, startOfDay } = require('date-fns');
 const { utcToZonedTime } = require('date-fns-tz');
 const { getTasksBySynced } = require('./get-report');
-const { getSprints } = require('./get-sprints');
 const { getZohoTasks } = require('./get-zoho-tasks');
-const { markAsSynced } = require('./mark-as-synced');
-const { getHeaders, userId } = require('./config');
+const { markAllAsSynced } = require('./update-delete-task');
+const { getHeaders, getSprints, userConfig } = require('./utils');
 const logTaskHoursAndSync = async (project = '139011000000148327') => {
-  const [tasks, zohoTasks, activeSprint] = await Promise.all([
+  const [tasks, zohoTasks, activeSprint, config] = await Promise.all([
     getTasksBySynced(),
     getZohoTasks({ params: { subitem: true } }),
     getSprints({ params: { type: '2' } }),
+    userConfig(),
   ]);
   const response = { success: 0, failed: 0, total: 0 };
   const headers = await getHeaders();
 
   for (const task of tasks) {
     const zohoTask = zohoTasks.find(({ taskId }) => {
-      return taskId === task.taskId;
+      return taskId === task.task;
     });
     const newData = new FormData();
     const newDate = new Date(task.date);
@@ -29,11 +29,11 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
     const date = format(zonedDate, "yyyy-MM-dd'T'HH:mm:ssXXX");
     const parentUrl = `https://externalusers.zohosprints.com/zsapi/team/803166918/projects/${project}/sprints/${activeSprint?.[0]?.value}/item/${zohoTask?.value}/timesheet/?action=additemlog`;
 
-    newData.append('users', userId);
+    newData.append('users', config.zoho.userId);
     newData.append('duration', duration);
     newData.append('isbillable', 1);
     newData.append('date', date);
-    newData.append('notes', task.notes ? `<div>${task.notes}</div>` : '');
+    newData.append('notes', task.remarks ? `<div>${task.remarks}</div>` : '');
 
     try {
       const resp = await axios.post(parentUrl, newData, { headers });
@@ -41,7 +41,7 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
       if (resp.data.status === 'success') {
         response.success++;
 
-        await markAsSynced(task.id);
+        await markAllAsSynced([task.id], task.date);
       } else {
         response.failed++;
       }
