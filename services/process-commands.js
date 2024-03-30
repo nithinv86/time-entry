@@ -5,7 +5,7 @@ const { logTaskHoursAndSync } = require('./log-task-hours-and-sync');
 const { addNewTask } = require('./add-task');
 const { getZohoTasks } = require('./get-zoho-tasks');
 const { filterCalls } = require('./filter');
-const { markAllAsSynced, updateTask, deleteTask } = require('./update-delete-task');
+const { updateTask, deleteTask } = require('./update-delete-task');
 const processArgs = async (type, value) => {
   try {
     await checkConfig();
@@ -68,15 +68,13 @@ const processArgs = async (type, value) => {
           params.all = true;
         }
 
-        console.log(await getTasksByDate());
+        console.table(await getTasksByDate());
 
         break;
       }
 
       case 'filter': {
-        if (values) {
-          await filterCalls(values);
-        }
+        await filterCalls(values);
 
         break;
       }
@@ -89,12 +87,6 @@ const processArgs = async (type, value) => {
 
       case 'delete': {
         console.log(await deleteTask(values));
-
-        break;
-      }
-
-      case 'markAllAsSynced': {
-        console.log(await markAllAsSynced(['1711633143990'], '2024-03-28'));
 
         break;
       }

@@ -22,6 +22,7 @@ const keyMap = {
   r: 'remarks',
   remarks: 'remarks',
   id: 'id',
+  i: 'id',
 };
 const contentTableHeading =
   '| id | project | sprint | date | task | work | duration | remarks | synced |';
