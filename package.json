@@ -1,31 +1,37 @@
 {
-  "name": "@mails2nithin/time-entry",
-  "version": "0.0.5-0",
+  "name": "timeentry",
+  "version": "0.0.0-0",
   "description": "Nithin time entry cli",
   "main": "index.js",
+  "author": {
+    "name": "Nithin V",
+    "email": "mails2nithin@gmail.com"
+  },
   "bin": {
+    "timeentry": "./index.js",
     "time": "./index.js"
   },
   "scripts": {
     "start": "node index",
     "start:dev": "nodemon index",
-    "test": "npm run test",
-    "lint": "eslint \"{services,public}/**/*.js\" --fix",
-    "prettier": "prettier \"{services,public}/**/*.(html|scss|json|js)\" --write"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint \"services/*.js\" --fix",
+    "prettier": "prettier \"services/*.js\" --write"
   },
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/nithinv86/time-entry.git"
   },
   "keywords": [
-    "nithin",
     "time",
-    "entry"
+    "entry",
+    "timeentry",
+    "keeper",
+    "zoho",
+    "control",
+    "controller",
+    "nithin"
   ],
-  "author": {
-    "name": "Nithin V",
-    "email": "mails2nithin@gmail.com"
-  },
   "license": "ISC",
   "bugs": {
     "url": "https://gitlab.com/nithinv86/time-entry/issues"
@@ -53,9 +59,7 @@
   },
   "lint-staged": {
     "**/*.(js)": [
-      "eslint --fix"
-    ],
-    "*.(html|scss|json|js)": [
+      "eslint --fix",
       "prettier --write"
     ]
   },
