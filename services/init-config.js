@@ -92,4 +92,4 @@ const switchDefaultProject = async () => {
   });
 };
 
-module.exports = { init, getConfigDetails, checkConfig, switchDefaultProject };
+module.exports = { init, checkConfig, switchDefaultProject };

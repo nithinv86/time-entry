@@ -13,7 +13,7 @@ const initNpm = async () => {
 
   if (type === 'init') {
     init();
-  } else if (type === 'switch project') {
+  } else if (type === 'switch') {
     switchDefaultProject();
   } else {
     processArgs(type, value?.join(' '));

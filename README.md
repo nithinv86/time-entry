@@ -59,7 +59,7 @@ npm install npm@latest -g
 
 ### Commands
 
-After creating the Docker container, you can utilize the app with the following commands:
+Now you can utilize the app with the following commands:
 
 - To initialize, execute the following command and input the necessary information when prompted.:
 
@@ -116,6 +116,8 @@ Contributions are welcomed and greatly appreciated! Here's how you can contribut
 5. Open a Pull Request
 
 If you have any suggestions for improvements or new features, feel free to open an issue with the "enhancement" tag. Don't forget to give the project a star if you find it useful. Thank you for your contributions!
+
+**If you find any bugs or you have any improvement options [click here](incoming+nithinv86-time-entry-56105506-ahnteawx9z4nua5ckrbmjp23x-issue@incoming.gitlab.com) to drop an email.**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
