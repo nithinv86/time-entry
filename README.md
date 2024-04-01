@@ -6,7 +6,7 @@
 <br />
 <div align="center">
   <a href="https://gitlab.com/nithinv86/time-entry">
-    <img src="./favicon.png" alt="Logo" width="80" height="80">
+    <img src="https://gitlab.com/nithinv86/time-entry/favicon.png" alt="Logo" width="80" height="80">
   </a>
 </div>
 
