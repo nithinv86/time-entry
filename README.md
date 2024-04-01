@@ -35,7 +35,7 @@
 
 ## About time entry
 
-If you find yourself grappling with work time entry system, fret not! There's a straightforward and effective alternative method available to help you effortlessly track and update your time.
+If you find yourself struggling with the intricacies of our work time entry system, rest assured, you're not alone. We understand that navigating complex systems can be daunting, but fear not! We're here to provide you with a simple and efficient alternative command line tool that will make tracking and updating your time a breeze. Our goal is to streamline your workflow and ensure that you can focus on your tasks without the added stress of wrestling with unfamiliar software. With our CLI, you'll be able to seamlessly record your time with ease, allowing you to devote more energy to your work and less time worrying about administrative tasks. So why wait? Let us simplify your time-tracking process today!
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -43,11 +43,17 @@ If you find yourself grappling with work time entry system, fret not! There's a 
 
 ## Getting Started
 
-Simply run `npm install -g @mails2nithin/time-entry` the app onto your local machine, follow the initial setup instructions, and you'll be able to effortlessly track and update your time. Enjoy the convenience it brings!
+To take full advantage of our comprehensive time-tracking solution, you can get started with ease by following a straightforward process. First, initiate the installation process by running `npm install -g @mails2nithin/time-entry` to seamlessly install the application onto your local machine. Once the installation is successfully completed, the next step involves configuring the app to tailor it to your specific requirements. This can be effortlessly achieved by entering the `timecli init` command, which prompts you to provide a few key inputs to set up the application according to your preferences.
+
+With just a few simple inputs, you'll unlock access to a robust tool that streamlines the entire process of tracking and updating your time commitments. Bid farewell to the days of laborious manual entries, and usher in an era of enhanced efficiency and pinpoint accuracy in your time management endeavors.
+
+Embrace the unparalleled convenience and peace of mind that our solution offers, empowering you to seamlessly navigate through your tasks and projects with utmost efficiency. Whether you're an individual working independently or part of a collaborative team, our time-tracking app is meticulously designed to cater to your unique needs, surpassing your expectations every step of the way.
+
+Embark on a journey to optimize your productivity effortlessly, as you experience the transformative impact of our innovative time-tracking solution firsthand. Make today the day you elevate your productivity to unprecedented heights, with our user-friendly and feature-rich application at your disposal.
 
 ### Prerequisites
 
-To use the software, you'll need:
+To use the software effectively, there are several prerequisites you must meet. First and foremost, you'll require a compatible device, whether it's a desktop computer or laptop. The software should be compatible with the operating system running on your device, whether it's Windows, macOS or Linux. Additionally, ensure that your device meets the minimum hardware requirements specified by the software developer to ensure smooth performance. It's also essential to have a stable internet connection, especially if the software relies on cloud-based services or requires frequent updates. Familiarity with basic computer skills and understanding of the software's functionalities will also be advantageous in navigating and utilizing its features effectively. By fulfilling these requirements, you can optimize your experience with the software and leverage its capabilities to their fullest extent.
 
 - npm:
 
@@ -61,10 +67,34 @@ npm install npm@latest -g
 
 Now you can utilize the app with the following commands:
 
-- To initialize, execute the following command and input the necessary information when prompted.:
+- The text provides instructions on how to initialize a process or system by executing a specific command. Upon executing this command, the system will prompt the user to input necessary information. This information typically includes key details or configurations required to set up or initialize the system properly. By following these instructions, users can ensure that the system is initialized correctly and ready for use. The command serves as a starting point for configuring the system, and the prompt ensures that users provide the essential information needed for the initialization process to proceed smoothly. Overall, the text offers clear guidance on how to initiate the setup process and emphasizes the importance of providing the necessary information as prompted.:
 
   ```sh
   timectl init
+  ```
+
+- The provided text instructs users on how to add a time entry within a system or application. It offers flexibility by presenting two alternative commands that users can choose from to accomplish this task. Additionally, it notes that there are optional fields that can be included in the time entry, namely the `project name` and `sprint`. The `project name` field is only necessary if the user has selected a default project during the initialization process. Including this field allows users to specify which project the time entry is associated with. Overall, the text provides clear guidance on how to add a time entry and highlights optional fields that users may consider including for further context or organization.
+
+  ```sh
+  timectl add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
+  ```
+
+  or
+
+  ```sh
+  timectl add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
+  ```
+
+- The text offers guidance on how to update a time entry within a system or application. It provides a specific command that users can execute to initiate the update process. Additionally, it mentions that there are optional fields, namely `project name` and `sprint`, which users can include in the update command if necessary.
+
+  ```sh
+  timectl update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
+  ```
+
+- To retrieve the time entries with details for the last week, use the command:
+
+  ```sh
+  timectl entries
   ```
 
 - To retrieve the time entries for the last week, use the command:
@@ -79,27 +109,7 @@ Now you can utilize the app with the following commands:
   timectl status -f <start_date> -t <end_date>
   ```
 
-  Ensure to replace `<start_date>` and `<end_date>` with the desired dates in the specified format. This will allow you to effectively manage and track your time entries using the app within the Docker container.
-
-- To add a time entry, use either of the following commands: (Optional fields include `project name` and `sprint`)
-
-  ```sh
-  timectl add -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
-  ```
-
-  or
-
-  ```sh
-  timectl add -project <project name> -sprint <sprint number> -date <date in 'yyyy-mm-dd' format> -task <task id> -work <short description> -duration <duration in minutes> -remarks <comments>
-  ```
-
-- To update a time entry, use the following command: (Optional fields include `project name` and `sprint`)
-
-  ```sh
-  timectl update -id <id of the current entry> -p <project name> -s <sprint> -t <task id> -dt <date in 'yyyy-mm-dd' format> -w <short description> -du <duration in minutes> -r <comments>
-  ```
-
-  Ensure that the ID is mandatory and the rest of the fields are optional.
+  Ensure to replace `<start_date>` and `<end_date>` with the desired dates in the specified format. This will allow you to effectively manage and track your time entries using the app.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -117,7 +127,9 @@ Contributions are welcomed and greatly appreciated! Here's how you can contribut
 
 If you have any suggestions for improvements or new features, feel free to open an issue with the "enhancement" tag. Don't forget to give the project a star if you find it useful. Thank you for your contributions!
 
-**If you find any bugs or you have any improvement options [click here](incoming+nithinv86-time-entry-56105506-ahnteawx9z4nua5ckrbmjp23x-issue@incoming.gitlab.com) to drop an email.**
+If you encounter any bugs while using our service or have suggestions for improvement, we value your feedback immensely. Your input helps us enhance the user experience and ensure our platform operates smoothly. Please don't hesitate to reach out to us by **[clicking the link](incoming+nithinv86-time-entry-56105506-ahnteawx9z4nua5ckrbmjp23x-issue@incoming.gitlab.com)** to send us an email detailing any issues or suggestions you may have. We appreciate your contribution to making our product even better and look forward to hearing from you.
+
+**[Click here] to drop an email.**
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
