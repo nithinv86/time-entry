@@ -58,9 +58,9 @@ const getTasksBySynced = async (synced = 'false') => {
     console.error(error.message);
   }
 };
-const getReport = async (from, to) => {
+const getReport = async (filters) => {
   try {
-    const resp = await getTasksByDate(from, to);
+    const resp = await getTasksByDate(filters);
     const adhocTasks = ['adhoc', 'internal', 'internal'];
 
     return (resp || []).reduce((res, { date, work, synced, duration }) => {
@@ -92,10 +92,10 @@ const getReport = async (from, to) => {
 const getStatus = async (values) => {
   const data = getFilters(values);
 
-  console.table(await getReport(data.from, data.to));
+  console.table(await getReport(data));
 };
 const getFilters = (values) => {
-  const data = {};
+  const filters = {};
   const keyMap = {
     f: 'from',
     from: 'from',
@@ -112,14 +112,16 @@ const getFilters = (values) => {
         key = key.substring(1);
       }
 
-      data[keyMap[key]] = new Date(itemValue).toISOString().split('T')[0];
+      filters[keyMap[key]] = new Date(itemValue).toISOString().split('T')[0];
     }
   } else {
-    data.from = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0];
-    data.to = new Date().toISOString().split('T')[0];
+    filters.from = new Date(new Date().setDate(new Date().getDate() - 7))
+      .toISOString()
+      .split('T')[0];
+    filters.to = new Date().toISOString().split('T')[0];
   }
 
-  return data;
+  return filters;
 };
 
 module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };
