@@ -11,18 +11,6 @@ const processArgs = async (type, value) => {
     const values = value ? removeEmpty(value?.split(' -')) : value;
 
     switch (type) {
-      case 'status': {
-        await getStatus(values);
-
-        break;
-      }
-
-      case 'zoho': {
-        console.log(await logTaskHoursAndSync());
-
-        break;
-      }
-
       case 'add': {
         await addNewTask(values);
 
@@ -35,20 +23,26 @@ const processArgs = async (type, value) => {
         break;
       }
 
-      case 'entries': {
-        const params = {};
-
-        if (values && values.includes('-a')) {
-          params.all = true;
-        }
-
-        console.table(await getTasksByDate());
+      case 'delete': {
+        console.log(await deleteTask(values));
 
         break;
       }
 
-      case 'delete': {
-        console.log(await deleteTask(values));
+      case 'status': {
+        await getStatus(values);
+
+        break;
+      }
+
+      case 'entries': {
+        console.table(await getTasksByDate(values));
+
+        break;
+      }
+
+      case 'zoho': {
+        console.log(await logTaskHoursAndSync());
 
         break;
       }
@@ -88,7 +82,7 @@ Running 'timectl help' will list available subcommands and provide some conceptu
       }
 
       default: {
-        console.error('Arrgument missing.');
+        console.error(`timectl: '${type}' is not a timectl command. See 'timectl -help'.`);
 
         return;
       }

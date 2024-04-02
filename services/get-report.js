@@ -6,18 +6,11 @@ const {
   userHomeDir,
   removeEmpty,
 } = require('./utils');
-const getTasksByDate = async (from, to) => {
+const getTasksByDate = async (values) => {
   try {
-    if (!from) {
-      from = new Date(new Date().setDate(new Date().getDate() - 7)).toISOString().split('T')[0];
-    }
-
-    if (!to) {
-      to = new Date();
-    }
-
+    const filters = getFilters(values);
     let data = [];
-    let startDate = new Date(from);
+    let startDate = new Date(filters.from);
     const itemHeading = contentTableHeading.split('|').reduce((acc, val) => {
       const item = val.trim();
       if (item && item !== '--') {
@@ -26,7 +19,7 @@ const getTasksByDate = async (from, to) => {
       return acc;
     }, []);
 
-    while (startDate <= new Date(to)) {
+    while (startDate <= new Date(filters.to)) {
       const stringDate = startDate.toISOString().split('T')[0];
       const item = readFileSync(path.join(userHomeDir, `.${stringDate}`));
 
@@ -97,6 +90,11 @@ const getReport = async (from, to) => {
   }
 };
 const getStatus = async (values) => {
+  const data = getFilters(values);
+
+  console.table(await getReport(data.from, data.to));
+};
+const getFilters = (values) => {
   const data = {};
   const keyMap = {
     f: 'from',
@@ -121,7 +119,7 @@ const getStatus = async (values) => {
     data.to = new Date().toISOString().split('T')[0];
   }
 
-  console.table(await getReport(data.from, data.to));
+  return data;
 };
 
 module.exports = { getReport, getStatus, getTasksByDate, getTasksBySynced };

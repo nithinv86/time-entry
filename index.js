@@ -2,13 +2,10 @@
 const { init, switchDefaultProject } = require('./services/init-config');
 const { processArgs } = require('./services/process-commands');
 const initNpm = async () => {
-  const [type, ...value] = (process.argv || []).splice(2);
+  let [type, ...value] = (process.argv || []).splice(2);
 
   if (!type) {
-    console.error('Arrgument missing...');
-
-    process.exit(1);
-    return;
+    type = 'h';
   }
 
   if (type === 'init') {
