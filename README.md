@@ -97,13 +97,19 @@ Now you can utilize the app with the following commands:
   timectl entries
   ```
 
-- To retrieve the time entries for the last week, use the command:
+- To retrieve time entries for a specific period, specify the start and end dates in the format `yyyy-mm-dd` using the following command:
+
+  ```sh
+  timectl entries -f <start_date> -t <end_date>
+  ```
+
+- To retrieve the time status for the last week, use the command:
 
   ```sh
   timectl status
   ```
 
-- To retrieve time entries for a specific period, specify the start and end dates in the format `yyyy-mm-dd` using the following command:
+- To retrieve time status for a specific period, specify the start and end dates in the format `yyyy-mm-dd` using the following command:
 
   ```sh
   timectl status -f <start_date> -t <end_date>
