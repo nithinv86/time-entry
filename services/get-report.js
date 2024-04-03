@@ -61,7 +61,7 @@ const getTasksBySynced = async (synced = 'false') => {
 const getReport = async (filters) => {
   try {
     const resp = await getTasksByDate(filters);
-    const adhocTasks = ['adhoc', 'internal', 'internal'];
+    const adhocTasks = ['adhoc', 'internal', 'internal call', 'internal calls'];
 
     return (resp || []).reduce((res, { date, work, synced, duration }) => {
       res[date] = {
@@ -112,7 +112,11 @@ const getFilters = (values) => {
         key = key.substring(1);
       }
 
-      filters[keyMap[key]] = new Date(itemValue).toISOString().split('T')[0];
+      const dt = new Date(itemValue).toISOString().split('T')[0];
+
+      if (dt) {
+        filters[keyMap[key]] = dt;
+      }
     }
   } else {
     filters.from = new Date(new Date().setDate(new Date().getDate() - 7))

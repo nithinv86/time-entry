@@ -9,9 +9,9 @@ const {
 } = require('./utils');
 const markAllAsSynced = async (ids, date) => {
   try {
-    const entries = await getTasksByDate(date, date);
+    const entries = await getTasksByDate([`f ${date}`, `t ${date}`]);
     const file = readFileSync(path.join(userHomeDir, `.${date}`));
-    let fileHeading = `${file.split(contentTableSeparator)[0]}\n${contentTableSeparator}`;
+    let fileHeading = getFileHeading(file.split(contentTableSeparator)[0]);
 
     for (const entry of entries) {
       if (entry) {
@@ -28,9 +28,9 @@ const markAllAsSynced = async (ids, date) => {
 const updateTask = async (values) => {
   try {
     const item = await convertToTaskData(values);
-    const entries = await getTasksByDate(item.date, item.date);
+    const entries = await getTasksByDate([`f ${item.date}`, `t ${item.date}`]);
     const file = readFileSync(path.join(userHomeDir, `.${item.date}`));
-    let fileHeading = `${file.split(contentTableSeparator)[0]}\n${contentTableSeparator}`;
+    let fileHeading = getFileHeading(file.split(contentTableSeparator)[0]);
 
     for (const entry of entries) {
       if (entry) {
@@ -54,7 +54,7 @@ const deleteTask = async (values) => {
     const item = await convertToTaskData(values);
     const entries = await getTasksByDate(item.date, item.date);
     const file = readFileSync(path.join(userHomeDir, `.${item.date}`));
-    let fileHeading = `${file.split(contentTableSeparator)[0]}\n${contentTableSeparator}`;
+    let fileHeading = getFileHeading(file.split(contentTableSeparator)[0]);
 
     for (const entry of entries) {
       if (entry) {
@@ -70,6 +70,15 @@ const deleteTask = async (values) => {
   } catch (error) {
     console.log(error.message);
   }
+};
+const getFileHeading = (topHeading) => {
+  const lastIndex = topHeading.lastIndexOf('\n');
+
+  if (lastIndex !== -1) {
+    topHeading = topHeading.substring(0, lastIndex) + topHeading.substring(lastIndex + 1);
+  }
+
+  return `${topHeading}\n${contentTableSeparator}\n`;
 };
 
 module.exports = { markAllAsSynced, updateTask, deleteTask };

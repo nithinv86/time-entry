@@ -1,6 +1,6 @@
 {
   "name": "@mails2nithin/time-entry",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Nithin time entry cli",
   "main": "index.js",
   "author": {
@@ -8,8 +8,7 @@
     "email": "mails2nithin@gmail.com"
   },
   "bin": {
-    "timectl": "./index.js",
-    "time": "./index.js"
+    "timectl": "./index.js"
   },
   "scripts": {
     "start": "node index",

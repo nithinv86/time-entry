@@ -133,9 +133,7 @@ Contributions are welcomed and greatly appreciated! Here's how you can contribut
 
 If you have any suggestions for improvements or new features, feel free to open an issue with the "enhancement" tag. Don't forget to give the project a star if you find it useful. Thank you for your contributions!
 
-If you encounter any bugs while using our service or have suggestions for improvement, we value your feedback immensely. Your input helps us enhance the user experience and ensure our platform operates smoothly. Please don't hesitate to reach out to us by **[clicking the link](incoming+nithinv86-time-entry-56105506-ahnteawx9z4nua5ckrbmjp23x-issue@incoming.gitlab.com)** to send us an email detailing any issues or suggestions you may have. We appreciate your contribution to making our product even better and look forward to hearing from you.
-
-**[Click here] to drop an email.**
+If you encounter any bugs while using our service or have suggestions for improvement, we value your feedback immensely. Your input helps us enhance the user experience and ensure our platform operates smoothly. Please don't hesitate to reach out to us by **[clicking the link](mailto:incoming+nithinv86-time-entry-56105506-ahnteawx9z4nua5ckrbmjp23x-issue@incoming.gitlab.com)** to send us an email detailing any issues or suggestions you may have. We appreciate your contribution to making our product even better and look forward to hearing from you.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
