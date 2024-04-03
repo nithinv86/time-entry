@@ -5,8 +5,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://gitlab.com/nithinv86/time-entry">
-    <img src="https://gitlab.com/nithinv86/time-entry/favicon.png" alt="Logo" width="80" height="80">
+  <a href="https://github.com/nithinv86/time">
+    <img src="https://github.com/nithinv86/time/favicon.png" alt="Logo" width="80" height="80">
   </a>
 </div>
 
@@ -153,6 +153,6 @@ If you have any questions or suggestions regarding the Time entry, feel free to 
 
 - Email: mails2nithin@gmail.com
 
-Project Link: [https://gitlab.com/nithinv86/time-entry](https://gitlab.com/nithinv86/time-entry)
+Project Link: [https://github.com/nithinv86/time](https://github.com/nithinv86/time)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
