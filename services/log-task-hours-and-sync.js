@@ -14,19 +14,17 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
     userConfig(),
   ]);
   const response = { success: 0, failed: 0, total: 0 };
+  const taskIdByDate = {};
   const headers = await getHeaders();
-
-  for (const task of tasks) {
-    const zohoTask = zohoTasks.find(({ taskId }) => {
-      return taskId === task.task;
-    });
+  const zohoApiCalls = tasks.map((task) => {
+    const zohoTask = zohoTasks.find(({ taskId }) => taskId === task.task);
     const newData = new FormData();
-    const newDate = new Date(task.date);
+    const taskDate = new Date(task.date);
     const duration = format(addMinutes(startOfDay(new Date()), task.duration), 'HH:mm');
 
-    newDate.setHours(0, 0, 0, 0);
+    taskDate.setHours(0, 0, 0, 0);
 
-    const zonedDate = utcToZonedTime(newDate, 'Asia/Kolkata');
+    const zonedDate = utcToZonedTime(taskDate, 'Asia/Kolkata');
     const date = format(zonedDate, "yyyy-MM-dd'T'HH:mm:ssXXX");
     const parentUrl = `https://externalusers.zohosprints.com/zsapi/team/803166918/projects/${project}/sprints/${activeSprint?.[0]?.value}/item/${zohoTask?.value}/timesheet/?action=additemlog`;
 
@@ -36,22 +34,31 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
     newData.append('date', date);
     newData.append('notes', task.remarks ? `<div>${task.remarks}</div>` : '');
 
-    try {
-      const resp = await axios.post(parentUrl, newData, { headers });
+    return axios.post(parentUrl, newData, { headers });
+  });
 
-      if (resp.data.status === 'success') {
+  try {
+    const resp = await Promise.all(zohoApiCalls);
+
+    for (const [index, item] of Object.entries(resp)) {
+      if (item.data.status === 'success') {
         response.success++;
 
-        await markAllAsSynced([task.id], task.date);
+        if (!taskIdByDate[tasks[index].date]) {
+          taskIdByDate[tasks[index].date] = [];
+        }
+
+        taskIdByDate[tasks[index].date].push(tasks[index].id);
       } else {
         response.failed++;
       }
-    } catch (error) {
-      console.error(error.message);
-      response.failed++;
     }
 
-    response.total++;
+    for (const [date, taskIds] of Object.entries(taskIdByDate)) {
+      await markAllAsSynced(taskIds, date);
+    }
+  } catch (error) {
+    console.log(error);
   }
 
   return response;
