@@ -2,6 +2,7 @@ const axios = require('axios');
 const { getHeaders, getSprints, userId } = require('./utils');
 const getZohoTasks = async ({ params }) => {
   const headers = await getHeaders();
+  let activeSprint;
 
   if (!params?.sprint) {
     if (params?.type) {
@@ -12,7 +13,7 @@ const getZohoTasks = async ({ params }) => {
       params.type = ['2'];
     }
 
-    const activeSprint = await getSprints({ params });
+    activeSprint = await getSprints({ params });
 
     params.sprint = activeSprint?.[0]?.value;
   } else {
@@ -23,6 +24,23 @@ const getZohoTasks = async ({ params }) => {
     }
   }
 
+  if (activeSprint?.length > 1) {
+    const resp = [];
+
+    for (const sprint of activeSprint) {
+      params.sprint = sprint.value;
+
+      const tasks = await getTasksBySprint({ params, headers });
+
+      resp.push(...tasks);
+    }
+
+    return resp;
+  } else {
+    return getTasksBySprint({ params, headers });
+  }
+};
+const getTasksBySprint = async ({ params, headers }) => {
   const p = {
     action: 'data',
     index: params.index || 1,

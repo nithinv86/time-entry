@@ -19,9 +19,10 @@ const questions = [
   { parent: 'zoho', type: 'input', key: 'portalId', label: 'Zoho client portal id' },
   { parent: 'zoho', type: 'input', key: 'sessionId', label: 'Zoho session id' },
   { parent: 'zoho', type: 'input', key: 'source', label: 'Zoho source' },
+  { parent: 'gitlab', type: 'input', key: 'userId', label: 'Gitlan user Id' },
   { parent: 'project', type: 'select', key: 'default', label: 'Choose default project' },
 ];
-let userConfig = { user: {}, zoho: {}, db: {} };
+let userConfig = { user: {}, zoho: {}, gitlab: {} };
 const init = async () => {
   console.log(
     chalk.blueBright.bold("Welcome to Nithin's Time Entry CLI app! ... "),

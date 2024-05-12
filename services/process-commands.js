@@ -4,6 +4,7 @@ const { getStatus, getTasksByDate } = require('./get-report');
 const { logTaskHoursAndSync } = require('./log-task-hours-and-sync');
 const { addNewTask } = require('./add-task');
 const { updateTask, deleteTask } = require('./update-delete-task');
+const { getGitlabActivities } = require('./get-gitlab-activities');
 const processArgs = async (type, value) => {
   try {
     await checkConfig();
@@ -43,6 +44,12 @@ const processArgs = async (type, value) => {
 
       case 'zoho': {
         console.log(await logTaskHoursAndSync());
+
+        break;
+      }
+
+      case 'gitlab': {
+        await getGitlabActivities(values);
 
         break;
       }

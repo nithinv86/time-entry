@@ -58,7 +58,7 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
       await markAllAsSynced(taskIds, date);
     }
   } catch (error) {
-    console.log(error);
+    console.log(error.message);
   }
 
   return response;

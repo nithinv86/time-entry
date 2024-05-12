@@ -106,6 +106,13 @@ const convertToTaskData = async (values) => {
 const existsSync = (path) => {
   return fs.existsSync(path);
 };
+const getGitLabAuth = async (config) => {
+  if (!config) {
+    config = await userConfig();
+  }
+
+  return { userId: config.gitlab.userId };
+};
 const getHeaders = async (config) => {
   if (!config) {
     config = await userConfig();
@@ -274,6 +281,7 @@ module.exports = {
   convertToTaskData,
   existsSync,
   filePath,
+  getGitLabAuth,
   getHeaders,
   getProjects,
   getSprints,
