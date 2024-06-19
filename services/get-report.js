@@ -61,7 +61,7 @@ const getTasksBySynced = async (synced = 'false') => {
 const getReport = async (filters) => {
   try {
     const resp = await getTasksByDate(filters);
-    const adhocTasks = ['adhoc', 'internal', 'internal call', 'internal calls'];
+    const adhocTasks = ['adhoc', 'internal', 'call', 'calls', 'code', 'review'];
 
     return (resp || []).reduce((res, { date, work, synced, duration }) => {
       res[date] = {
@@ -77,7 +77,7 @@ const getReport = async (filters) => {
         res[date].open += +duration;
       }
 
-      if (adhocTasks.includes(work.toLowerCase())) {
+      if (adhocTasks.some((adhoc) => work.toLowerCase().includes(adhoc))) {
         res[date].adhoc += +duration;
       } else {
         res[date].task += +duration;
