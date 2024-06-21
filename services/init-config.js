@@ -72,7 +72,7 @@ const checkConfig = async () => {
 const switchDefaultProject = async () => {
   let projects;
 
-  if (userConfig) {
+  if (Object.values(userConfig?.zoho).length) {
     projects = await getProjects(userConfig);
   } else {
     [projects, userConfig] = await Promise.all([getProjects(), checkConfig()]);

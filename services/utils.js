@@ -162,11 +162,12 @@ const getProjects = async (userConfig) => {
   }
 };
 const getSprints = async ({ params }) => {
+  const config = await userConfig();
   const headers = await getHeaders();
   const p = {
     index: params.index || 1,
     range: params.range || 150,
-    project: params.project || '139011000000148327',
+    project: params.project || config.project.default.value,
     action: 'data',
     team: '803166918',
   };
