@@ -10,6 +10,7 @@ const {
   userHomeDir,
   mkdirSync,
 } = require('./utils');
+const { getToken } = require('./get-gitlab-activities');
 const questions = [
   { parent: 'user', type: 'input', key: 'name', label: 'Your name' },
   { parent: 'user', type: 'input', key: 'email', label: 'email address' },
@@ -19,7 +20,9 @@ const questions = [
   { parent: 'zoho', type: 'input', key: 'portalId', label: 'Zoho client portal id' },
   { parent: 'zoho', type: 'input', key: 'sessionId', label: 'Zoho session id' },
   { parent: 'zoho', type: 'input', key: 'source', label: 'Zoho source' },
-  { parent: 'gitlab', type: 'input', key: 'userId', label: 'Gitlan user Id' },
+  { parent: 'gitlab', type: 'input', key: 'url', label: 'Personal Gitlab URL' },
+  { parent: 'gitlab', type: 'input', key: 'userId', label: 'Gitlab user Id' },
+  { parent: 'gitlab', type: 'input', key: 'password', label: 'Gitlab password' },
   { parent: 'project', type: 'select', key: 'default', label: 'Choose default project' },
 ];
 let userConfig = { user: {}, zoho: {}, gitlab: {} };
@@ -46,8 +49,13 @@ const getConfigDetails = async (index) => {
     writeFileSync(filePath, JSON.stringify(userConfig));
     switchDefaultProject(userConfig);
   } else {
-    rl.question(`${label}: `, (userInput) => {
-      userConfig[parent][key] = userInput;
+    rl.question(`${label}: `, async (userInput) => {
+      if (parent === 'gitlab' && key === 'password') {
+        userConfig[parent][key] = btoa(userInput);
+        userConfig[parent].token = await getToken(userConfig[parent]);
+      } else {
+        userConfig[parent][key] = userInput;
+      }
 
       getConfigDetails(index + 1);
     });

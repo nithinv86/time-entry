@@ -55,8 +55,8 @@ const getFilters = (values) => {
 };
 const getGitlabActivitiesByDate = async (date) => {
   const { getGitLabAuth, removeEmpty } = require('./utils');
-  const { userId } = await getGitLabAuth();
-  const gitlabUrl = `https://gitlab.4medica.net/users/${userId}/calendar_activities?date=`;
+  const { userId, url } = await getGitLabAuth();
+  const gitlabUrl = `${url}/users/${userId}/calendar_activities?date=`;
   const headers = {
     accept: 'application/json, text/plain, */*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
@@ -65,7 +65,7 @@ const getGitlabActivitiesByDate = async (date) => {
       'preferred_language=en; _gitlab_session=b35f3fc255427a78958cceb46533406b; event_filter=all; super_sidebar_collapsed=false; visitor_id=4f0c9162-90b5-4153-9324-7690bc9d3f96',
     pragma: 'no-cache',
     priority: 'u=1, i',
-    referer: `https://gitlab.4medica.net/${userId}`,
+    referer: `${url}/${userId}`,
     'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
     'sec-ch-ua-mobile': '?0',
     'sec-ch-ua-platform': '"macOS"',
@@ -140,5 +140,25 @@ const arrayToObjectByKey = (arr, key) => {
     return acc;
   }, {});
 };
+const getToken = async (params = {}) => {
+  if (!Object.keys(params)?.length) {
+    const { getGitLabAuth } = require('./utils');
+    const { userId, url, password } = await getGitLabAuth();
 
-module.exports = { getGitlabActivities };
+    params.url = url;
+    params.username = userId;
+    params.password = password;
+  }
+
+  const response = await axios.post(`${params.url}/oauth/token`, {
+    grant_type: 'password',
+    username: params.username,
+    password: atob(params.password),
+  });
+
+  const token = response.data.access_toke;
+  console.log(token);
+  return token;
+};
+
+module.exports = { getGitlabActivities, getToken };

@@ -13,6 +13,7 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
     getSprints({ params: { type: '2' } }),
     userConfig(),
   ]);
+
   const response = { success: 0, failed: 0, total: 0 };
   const taskIdByDate = {};
   const headers = await getHeaders();
