@@ -55,10 +55,10 @@ const getFilters = (values) => {
 };
 const getGitlabActivitiesByDate = async (date) => {
   const { getGitLabAuth, removeEmpty } = require('./utils');
-  const { userId, url } = await getGitLabAuth();
+  const { userId, url, token } = await getGitLabAuth();
   const gitlabUrl = `${url}/users/${userId}/calendar_activities?date=`;
-  const headers = {
-    accept: 'application/json, text/plain, */*',
+  /* const headers = {
+    accept: 'application/json, text/plain, *\/*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
     'cache-control': 'no-cache',
     cookie:
@@ -77,8 +77,9 @@ const getGitlabActivitiesByDate = async (date) => {
     'x-csrf-token':
       'maxJPk_u8ANQi_KmYuwR_w6KeWw4E3rqXMuXbOBdluz26Sx-n5ZNCv_gSA8IcX4Xhh6h_aCqsB5YNvC0rdUMtQ',
     'x-requested-with': 'XMLHttpRequest',
-  };
+  }; */
   // let config = { method: 'get', maxBodyLength: Infinity, url: `${gitlabUrl}2024-5-10`, headers };
+  const headers = { Authorization: `Bearer ${token}` };
 
   try {
     const response = await axios.get(`${gitlabUrl}${date}`, { headers });
