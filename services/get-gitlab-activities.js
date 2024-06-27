@@ -55,31 +55,14 @@ const getFilters = (values) => {
 };
 const getGitlabActivitiesByDate = async (date) => {
   const { getGitLabAuth, removeEmpty } = require('./utils');
-  const { userId, url, token } = await getGitLabAuth();
-  const gitlabUrl = `${url}/users/${userId}/calendar_activities?date=`;
-  /* const headers = {
-    accept: 'application/json, text/plain, *\/*',
-    'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
+  const git = await getGitLabAuth();
+  const gitlabUrl = `${git.url}/users/${git.userId}/calendar_activities?date=`;
+  const headers = {
+    accept: 'application/json, text/plain, */*',
     'cache-control': 'no-cache',
     cookie:
-      'preferred_language=en; _gitlab_session=b35f3fc255427a78958cceb46533406b; event_filter=all; super_sidebar_collapsed=false; visitor_id=4f0c9162-90b5-4153-9324-7690bc9d3f96',
-    pragma: 'no-cache',
-    priority: 'u=1, i',
-    referer: `${url}/${userId}`,
-    'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
-    'sec-fetch-dest': 'empty',
-    'sec-fetch-mode': 'cors',
-    'sec-fetch-site': 'same-origin',
-    'user-agent':
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-    'x-csrf-token':
-      'maxJPk_u8ANQi_KmYuwR_w6KeWw4E3rqXMuXbOBdluz26Sx-n5ZNCv_gSA8IcX4Xhh6h_aCqsB5YNvC0rdUMtQ',
-    'x-requested-with': 'XMLHttpRequest',
-  }; */
-  // let config = { method: 'get', maxBodyLength: Infinity, url: `${gitlabUrl}2024-5-10`, headers };
-  const headers = { Authorization: `Bearer ${token}` };
+      'preferred_language=en; remember_user_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IlcxczNOVjBzSWlReVlTUXhNQ1J4TkhsVlFuWlRZa1pEUzNsTloyUkZTaTR3UVRSbElpd2lNVGN4T1RRMU56QXhOeTQwT1RRNE1UazVJbDA9IiwiZXhwIjoiMjAyNC0wNy0xMVQwMjo1Njo1Ny40OTRaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX3VzZXJfdG9rZW4ifX0%3D--0c28f45fe68d006723718185ba94f13abe1bf4d1; known_sign_in=TWdsa2lUREhkZ1dPc0NzY0FIK09PQW5UaHVmR1dyVWJpcDU4Y1lrYnNETm1DU3ZyM21hQVVOclVZNmtxeVU5Nm4ySFlrSDc4QWJDS1pudWlmVmxOM2xvQnYvaXhmRm9FcFIxZzkyUnRFWlZiL0o0N1lFQnlqTldZKzk5MitMeUUtLXhFYUIzOXREVzZWenpSSDVRak5qdmc9PQ%3D%3D--74714f00dfbe3b02444a2a35b644f1f6217df8f2; _gitlab_session=30d0a4c3125e2c040852edfadc8f2fe6; _gitlab_session=ad2432878d37cc51e98c3c30f674e5ec',
+  };
 
   try {
     const response = await axios.get(`${gitlabUrl}${date}`, { headers });
@@ -141,25 +124,5 @@ const arrayToObjectByKey = (arr, key) => {
     return acc;
   }, {});
 };
-const getToken = async (params = {}) => {
-  if (!Object.keys(params)?.length) {
-    const { getGitLabAuth } = require('./utils');
-    const { userId, url, password } = await getGitLabAuth();
 
-    params.url = url;
-    params.username = userId;
-    params.password = password;
-  }
-
-  const response = await axios.post(`${params.url}/oauth/token`, {
-    grant_type: 'password',
-    username: params.username,
-    password: atob(params.password),
-  });
-
-  const token = response.data.access_toke;
-  console.log(token);
-  return token;
-};
-
-module.exports = { getGitlabActivities, getToken };
+module.exports = { getGitlabActivities };

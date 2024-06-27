@@ -43,7 +43,7 @@ const processArgs = async (type, value) => {
       }
 
       case 'zoho': {
-        console.log(await logTaskHoursAndSync());
+        console.log(await logTaskHoursAndSync(''));
 
         break;
       }

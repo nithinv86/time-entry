@@ -3,7 +3,6 @@ const os = require('os');
 const path = require('path');
 const readline = require('readline');
 const fs = require('fs');
-const { getToken } = require('./get-gitlab-activities');
 
 const userHomeDir = `${os.homedir()}/.time-entry`;
 const filePath = path.join(userHomeDir, '.zoho-config');
@@ -113,40 +112,13 @@ const getGitLabAuth = async (config) => {
   }
 
   if (config.gitlab.token) {
-    try {
-      const response = await axios.get(`${config.gitlab.url}/api/v4/user`, {
-        headers: { Authorization: `Bearer ${config.gitlab.token}` },
-      });
-
-      console.log('Token is valid', response.data);
-    } catch (error) {
-      if (error.response && error.response.status === 401) {
-        console.log('Token is invalid or expired.');
-        const newToken = await getToken(config.gitlab);
-        userConfig.gitlab.token = newToken;
-        console.log('New token:', newToken);
-        writeFileSync(filePath, JSON.stringify(userConfig));
-      } else {
-        console.error('An error occurred:', error.message);
-      }
-    }
-  } else {
-    try {
-      const newToken = await getToken(config.gitlab);
-      userConfig.gitlab.token = newToken;
-      console.log('New token:', newToken);
-      writeFileSync(filePath, JSON.stringify(userConfig));
-    } catch (error) {
-      console.error('An error occurred:', error.message);
-    }
+    return {
+      userId: config.gitlab.userId,
+      password: config.gitlab.password,
+      url: config.gitlab.url,
+      token: config.gitlab.token,
+    };
   }
-
-  return {
-    userId: config.gitlab.userId,
-    password: config.gitlab.password,
-    url: config.gitlab.url,
-    token: config.gitlab.token,
-  };
 };
 const getHeaders = async (config) => {
   if (!config) {
