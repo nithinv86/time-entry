@@ -62,20 +62,15 @@ const getGitlabActivitiesByDate = async (date) => {
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
     'cache-control': 'no-cache',
     cookie:
-      'preferred_language=en; _gitlab_session=b35f3fc255427a78958cceb46533406b; event_filter=all; super_sidebar_collapsed=false; visitor_id=4f0c9162-90b5-4153-9324-7690bc9d3f96',
+      'preferred_language=en; remember_user_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IlcxczNOVjBzSWlReVlTUXhNQ1J4TkhsVlFuWlRZa1pEUzNsTloyUkZTaTR3UVRSbElpd2lNVGN5TURNeU5UUTVOUzR4TkRNd05qRWlYUT09IiwiZXhwIjoiMjAyNC0wNy0yMVQwNDoxMTozNS4xNDNaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX3VzZXJfdG9rZW4ifX0%3D--837c4dd5167a603ad95fee9ed343af1376d1a74e; known_sign_in=TXFiYi9xZTkzOWpYS0RFd1UrQmpxNzIyZU5jL0NXckJEN0l6cVB4d0piR0wzNTFQT0l3TWxVUTMxQ1NlZ1dxS0kwVytXekhUOW1lTmIrK3V6WHZ2OUlESGhsNm1BL1RJL0Vza2VsbzNueE1sUlVGZ0YvWDdnNk5mTXcvNTdEeXgtLVlVWlVucFVtc1pPS2dzSjV5WStIUUE9PQ%3D%3D--9c31a4f691362092630c1a3e014a17ce0da940d8; _gitlab_session=35942d45329e0463adf0ee597cf23be6; event_filter=all',
     pragma: 'no-cache',
-    priority: 'u=1, i',
     referer: `https://gitlab.4medica.net/${userId}`,
-    'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-    'sec-ch-ua-mobile': '?0',
-    'sec-ch-ua-platform': '"macOS"',
-    'sec-fetch-dest': 'empty',
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
     'user-agent':
-      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
     'x-csrf-token':
-      'maxJPk_u8ANQi_KmYuwR_w6KeWw4E3rqXMuXbOBdluz26Sx-n5ZNCv_gSA8IcX4Xhh6h_aCqsB5YNvC0rdUMtQ',
+      'IAMWPXhisEhwzy_-za_1jQShB3Dr6k-LRgms_U6TgvbpMdTWtMkxyWTAcC_z3eeXqHoboPgcdE_VxIaPeRArNQ',
     'x-requested-with': 'XMLHttpRequest',
   };
   // let config = { method: 'get', maxBodyLength: Infinity, url: `${gitlabUrl}2024-5-10`, headers };
