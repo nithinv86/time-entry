@@ -6,17 +6,16 @@ const { getTasksBySynced } = require('./get-report');
 const { getZohoTasks } = require('./get-zoho-tasks');
 const { markAllAsSynced } = require('./update-delete-task');
 const { getHeaders, getSprints, userConfig } = require('./utils');
-const logTaskHoursAndSync = async (project = '139011000000148327') => {
-  const [tasks, zohoTasks, activeSprint, config] = await Promise.all([
-    getTasksBySynced(),
-    getZohoTasks({ params: { subitem: true } }),
-    getSprints({ params: { type: '2' } }),
-    userConfig(),
-  ]);
-  const response = { success: 0, failed: 0, total: 0 };
-  const taskIdByDate = {};
-  const headers = await getHeaders();
-  const zohoApiCalls = tasks.map((task) => {
+const logTaskHoursAndSync = async () => {
+  const [tasks, config] = await Promise.all([getTasksBySynced(), userConfig()]);
+  const response = { success: 0, failed: 0, total: tasks.length, pending: tasks.length };
+
+  for (const task of tasks) {
+    const project = config.zoho.projects[task.project]?.value;
+    const activeSprint = await getSprints({ params: { type: '2', project } });
+    const sprint = activeSprint.find(({ label }) => label === task.sprint)?.value;
+    const zohoTasks = await getZohoTasks({ params: { project, sprint, subitem: true } });
+    const headers = await getHeaders();
     const zohoTask = zohoTasks.find(({ taskId }) => taskId === task.task);
     const newData = new FormData();
     const taskDate = new Date(task.date);
@@ -34,31 +33,25 @@ const logTaskHoursAndSync = async (project = '139011000000148327') => {
     newData.append('date', date);
     newData.append('notes', task.remarks ? `<div>${task.remarks}</div>` : '');
 
-    return axios.post(parentUrl, newData, { headers });
-  });
+    try {
+      const item = await axios.post(parentUrl, newData, { headers });
 
-  try {
-    const resp = await Promise.all(zohoApiCalls);
-
-    for (const [index, item] of Object.entries(resp)) {
       if (item.data.status === 'success') {
         response.success++;
 
-        if (!taskIdByDate[tasks[index].date]) {
-          taskIdByDate[tasks[index].date] = [];
-        }
-
-        taskIdByDate[tasks[index].date].push(tasks[index].id);
+        await markAllAsSynced(task.id, task.date);
       } else {
         response.failed++;
       }
+
+      response.pending--;
+    } catch (error) {
+      response.failed++;
+
+      console.log(error.message);
     }
 
-    for (const [date, taskIds] of Object.entries(taskIdByDate)) {
-      await markAllAsSynced(taskIds, date);
-    }
-  } catch (error) {
-    console.log(error.message);
+    console.log(response);
   }
 
   return response;

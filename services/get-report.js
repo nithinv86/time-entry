@@ -6,9 +6,12 @@ const {
   userHomeDir,
   removeEmpty,
 } = require('./utils');
-const getTasksByDate = async (values) => {
+const getTasksByDate = async (filters) => {
   try {
-    const filters = getFilters(values);
+    if (!(filters?.from || filters?.to)) {
+      filters = getFilters(filters);
+    }
+
     let data = [];
     let startDate = new Date(filters.from);
     const itemHeading = contentTableHeading.split('|').reduce((acc, val) => {
@@ -98,6 +101,7 @@ const getFilters = (values) => {
   const filters = {};
   const keyMap = {
     f: 'from',
+    '-f': 'from',
     from: 'from',
     t: 'to',
     to: 'to',
