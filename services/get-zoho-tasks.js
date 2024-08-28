@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getHeaders, getSprints, userId } = require('./utils');
+const { getHeaders, getSprints, userId, userConfig } = require('./utils');
 const getZohoTasks = async ({ params }) => {
   const headers = await getHeaders();
   let activeSprint;
@@ -41,6 +41,7 @@ const getZohoTasks = async ({ params }) => {
   }
 };
 const getTasksBySprint = async ({ params, headers }) => {
+  const { zoho } = await userConfig();
   const p = {
     action: 'data',
     index: params.index || 1,
@@ -50,7 +51,7 @@ const getTasksBySprint = async ({ params, headers }) => {
     subitem: params.subitem || false,
     team: '803166918',
   };
-  const parentUrl = `https://externalusers.zohosprints.com/zsapi/team/${p.team}/projects/${p.project}/sprints/${p.sprint}/item/?action=${p.action}&range=${p.range}&index=${p.index}&subitem=${p.subitem}`;
+  const parentUrl = `https://externalusers.zohosprints.com/zsapi/team/${p.team}/projects/${p.project}/sprints/${p.sprint}/item/?action=${p.action}&range=${p.range}&index=${p.index}&subitem=${p.subitem}&customviewid=${zoho.customviewid}`;
 
   try {
     const response = await axios.get(parentUrl, { headers });

@@ -8,9 +8,17 @@ const { markAllAsSynced } = require('./update-delete-task');
 const { getHeaders, getSprints, userConfig } = require('./utils');
 const logTaskHoursAndSync = async () => {
   const [tasks, config] = await Promise.all([getTasksBySynced(), userConfig()]);
-  const response = { success: 0, failed: 0, total: tasks.length, pending: tasks.length };
+  const response = {
+    success: 0,
+    failed: 0,
+    total: tasks.length,
+    pending: tasks.length,
+    erroredTasks: [],
+    successTasks: [],
+  };
 
   for (const task of tasks) {
+    let status = 'failed';
     const project = config.zoho.projects[task.project]?.value;
     const activeSprint = await getSprints({ params: { type: '2', project } });
     const sprint = activeSprint.find(({ label }) => label === task.sprint)?.value;
@@ -20,6 +28,14 @@ const logTaskHoursAndSync = async () => {
     const newData = new FormData();
     const taskDate = new Date(task.date);
     const duration = format(addMinutes(startOfDay(new Date()), task.duration), 'HH:mm');
+
+    if (!zohoTasks) {
+      response.failed++;
+      response.erroredTasks.push(task.task);
+      console.log('No tasks found', task.task);
+
+      continue;
+    }
 
     taskDate.setHours(0, 0, 0, 0);
 
@@ -37,21 +53,23 @@ const logTaskHoursAndSync = async () => {
       const item = await axios.post(parentUrl, newData, { headers });
 
       if (item.data.status === 'success') {
-        response.success++;
+        status = 'success';
 
+        response.success++;
+        response.successTasks.push(task.task);
         await markAllAsSynced(task.id, task.date);
       } else {
         response.failed++;
+        response.erroredTasks.push(task.task);
       }
-
-      response.pending--;
     } catch (error) {
       response.failed++;
-
+      response.erroredTasks.push(task.task);
       console.log(error.message);
     }
 
-    console.log(response);
+    response.pending--;
+    console.log(`Task ${task.task} is ${status}`);
   }
 
   return response;
