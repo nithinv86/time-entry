@@ -7,7 +7,7 @@ const {
   writeFileSync,
   convertToTaskData,
 } = require('./utils');
-const markAllAsSynced = async (ids, date) => {
+const updateStatus = async (taskId, date, taskStatus = true) => {
   try {
     const entries = await getTasksByDate([`f ${date}`, `t ${date}`]);
     const file = readFileSync(path.join(userHomeDir, `.${date}`));
@@ -15,8 +15,9 @@ const markAllAsSynced = async (ids, date) => {
 
     for (const entry of entries) {
       if (entry) {
-        const { id, project, sprint, task, date, work, duration, remarks } = entry;
-        fileHeading += `\n| ${id} | ${project} | ${sprint} | ${date} | ${task} | ${work} | ${duration} | ${remarks} | true |`;
+        const { id, project, sprint, task, date, work, duration, remarks, status } = entry;
+
+        fileHeading += `\n| ${id} | ${project} | ${sprint} | ${date} | ${task} | ${work} | ${duration} | ${remarks} | ${taskId === id ? taskStatus : status} |`;
       }
     }
 
@@ -81,4 +82,4 @@ const getFileHeading = (topHeading) => {
   return `${topHeading}\n${contentTableSeparator}\n`;
 };
 
-module.exports = { markAllAsSynced, updateTask, deleteTask };
+module.exports = { updateStatus, updateTask, deleteTask };

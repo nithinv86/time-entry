@@ -4,7 +4,7 @@ const { format, addMinutes, startOfDay } = require('date-fns');
 const { utcToZonedTime } = require('date-fns-tz');
 const { getTasksBySynced } = require('./get-report');
 const { getZohoTasks } = require('./get-zoho-tasks');
-const { markAllAsSynced } = require('./update-delete-task');
+const { updateStatus } = require('./update-delete-task');
 const { getHeaders, getSprints, userConfig } = require('./utils');
 const logTaskHoursAndSync = async () => {
   const [tasks, config] = await Promise.all([getTasksBySynced(), userConfig()]);
@@ -57,7 +57,7 @@ const logTaskHoursAndSync = async () => {
 
         response.success++;
         response.successTasks.push(task.task);
-        await markAllAsSynced(task.id, task.date);
+        await updateStatus(task.id, task.date);
       } else {
         response.failed++;
         response.erroredTasks.push(task.task);
