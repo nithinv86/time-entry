@@ -7,7 +7,7 @@ const {
   writeFileSync,
   convertToTaskData,
 } = require('./utils');
-const updateStatus = async (taskId, date, taskStatus = true) => {
+const updateTaskStatus = async (taskId, date, taskStatus = true) => {
   try {
     const entries = await getTasksByDate([`f ${date}`, `t ${date}`]);
     const file = readFileSync(path.join(userHomeDir, `.${date}`));
@@ -82,4 +82,4 @@ const getFileHeading = (topHeading) => {
   return `${topHeading}\n${contentTableSeparator}\n`;
 };
 
-module.exports = { updateStatus, updateTask, deleteTask };
+module.exports = { updateTaskStatus, updateTask, deleteTask };
