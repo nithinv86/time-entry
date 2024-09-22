@@ -45,7 +45,7 @@ const appendFileSync = (path, data) => {
   }
 };
 const convertToTaskData = async (values) => {
-  const [{ project }, sprint] = await Promise.all([
+  const [{ project }, sprints] = await Promise.all([
     userConfig(),
     getSprints({ params: { type: '2' } }),
   ]);
@@ -98,7 +98,23 @@ const convertToTaskData = async (values) => {
   }
 
   if (!data.sprint) {
-    data.sprint = sprint[sprint.length - 1].label;
+    if (sprints.length > 1) {
+      await new Promise((resolve) => {
+        console.log('Multiple active sprints are available, select your task sprint.');
+        for (const [index, project] of Object.entries(sprints)) {
+          console.log(`${+index + 1}. ${project.label}`);
+        }
+
+        rl.question('Enter the sprint index: ', (userInput) => {
+          data.sprint = sprints[+userInput - 1].label;
+
+          rl.close();
+          resolve(data.sprint);
+        });
+      });
+    } else {
+      data.sprint = sprints[0].label;
+    }
   }
 
   return data;

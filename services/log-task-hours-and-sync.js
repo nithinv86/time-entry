@@ -29,7 +29,7 @@ const logTaskHoursAndSync = async () => {
     const taskDate = new Date(task.date);
     const duration = format(addMinutes(startOfDay(new Date()), task.duration), 'HH:mm');
 
-    if (!zohoTasks) {
+    if (!zohoTask) {
       response.failed++;
       response.erroredTasks.push(task.task);
       console.log('No tasks found', task.task);
