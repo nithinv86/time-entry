@@ -55,28 +55,26 @@ const getFilters = (values) => {
 };
 const getGitlabActivitiesByDate = async (date) => {
   const { getGitLabAuth, removeEmpty } = require('./utils');
-  const { userId } = await getGitLabAuth();
-  const gitlabUrl = `https://gitlab.4medica.net/users/${userId}/calendar_activities?date=`;
+  const { userId, url, cookie, xCsrfToken } = await getGitLabAuth();
+  const gitlabUrl = `${url}/users/${userId}/calendar_activities?date=${date}`;
   const headers = {
     accept: 'application/json, text/plain, */*',
     'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8,ml;q=0.7',
     'cache-control': 'no-cache',
-    cookie:
-      'preferred_language=en; remember_user_token=eyJfcmFpbHMiOnsibWVzc2FnZSI6IlcxczNOVjBzSWlReVlTUXhNQ1J4TkhsVlFuWlRZa1pEUzNsTloyUkZTaTR3UVRSbElpd2lNVGN5TURNeU5UUTVOUzR4TkRNd05qRWlYUT09IiwiZXhwIjoiMjAyNC0wNy0yMVQwNDoxMTozNS4xNDNaIiwicHVyIjoiY29va2llLnJlbWVtYmVyX3VzZXJfdG9rZW4ifX0%3D--837c4dd5167a603ad95fee9ed343af1376d1a74e; known_sign_in=TXFiYi9xZTkzOWpYS0RFd1UrQmpxNzIyZU5jL0NXckJEN0l6cVB4d0piR0wzNTFQT0l3TWxVUTMxQ1NlZ1dxS0kwVytXekhUOW1lTmIrK3V6WHZ2OUlESGhsNm1BL1RJL0Vza2VsbzNueE1sUlVGZ0YvWDdnNk5mTXcvNTdEeXgtLVlVWlVucFVtc1pPS2dzSjV5WStIUUE9PQ%3D%3D--9c31a4f691362092630c1a3e014a17ce0da940d8; _gitlab_session=35942d45329e0463adf0ee597cf23be6; event_filter=all',
+    cookie,
     pragma: 'no-cache',
-    referer: `https://gitlab.4medica.net/${userId}`,
+    referer: `${url}/${userId}`,
     'sec-fetch-mode': 'cors',
     'sec-fetch-site': 'same-origin',
     'user-agent':
       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-    'x-csrf-token':
-      'IAMWPXhisEhwzy_-za_1jQShB3Dr6k-LRgms_U6TgvbpMdTWtMkxyWTAcC_z3eeXqHoboPgcdE_VxIaPeRArNQ',
+    'x-csrf-token': xCsrfToken,
     'x-requested-with': 'XMLHttpRequest',
   };
   // let config = { method: 'get', maxBodyLength: Infinity, url: `${gitlabUrl}2024-5-10`, headers };
 
   try {
-    const response = await axios.get(`${gitlabUrl}${date}`, { headers });
+    const response = await axios.get(gitlabUrl, { headers });
 
     const $ = cheerio.load(response.data);
 

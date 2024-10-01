@@ -127,7 +127,7 @@ const getGitLabAuth = async (config) => {
     config = await userConfig();
   }
 
-  return { userId: config.gitlab.userId };
+  return config.gitlab;
 };
 const getHeaders = async (config) => {
   if (!config) {
