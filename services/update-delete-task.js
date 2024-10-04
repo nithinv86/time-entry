@@ -15,9 +15,9 @@ const updateTaskStatus = async (taskId, date, taskStatus = true) => {
 
     for (const entry of entries) {
       if (entry) {
-        const { id, project, sprint, task, date, work, duration, remarks, status } = entry;
+        const { id, project, sprint, task, date, work, duration, remarks, synced } = entry;
 
-        fileHeading += `\n| ${id} | ${project} | ${sprint} | ${date} | ${task} | ${work} | ${duration} | ${remarks} | ${taskId === id ? taskStatus : status} |`;
+        fileHeading += `\n| ${id} | ${project} | ${sprint} | ${date} | ${task} | ${work} | ${duration} | ${remarks} | ${taskId === id ? taskStatus : synced} |`;
       }
     }
 
