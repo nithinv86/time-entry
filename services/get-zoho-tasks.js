@@ -32,7 +32,7 @@ const getZohoTasks = async ({ params }) => {
 
       const tasks = await getTasksBySprint({ params, headers });
 
-      resp.push(...tasks);
+      resp.push(...(tasks || []));
     }
 
     return resp;
