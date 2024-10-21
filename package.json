@@ -1,6 +1,6 @@
 {
   "name": "@mails2nithin/time-entry",
-  "version": "2.8.1",
+  "version": "2.8.2",
   "description": "Nithin time entry cli",
   "main": "index.js",
   "author": {
