@@ -8,4 +8,4 @@
 
 ### Initial Release
 
-- First release of the package.
+- Release notes starting from 2.8.3
