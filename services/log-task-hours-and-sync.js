@@ -21,7 +21,9 @@ const logTaskHoursAndSync = async () => {
     let status = 'failed';
     const project = config.zoho.projects[task.project]?.value;
     const activeSprint = await getSprints({ params: { type: '2', project } });
-    const sprint = activeSprint.find(({ label }) => label === task.sprint)?.value;
+    const sprint = activeSprint.find(
+      ({ label }) => label.toLowerCase() === task.sprint.toLowerCase(),
+    )?.value;
     const zohoTasks = await getZohoTasks({ params: { project, sprint, subitem: true } });
     const headers = await getHeaders();
     const zohoTask = zohoTasks.find(({ taskId }) => taskId === task.task);
