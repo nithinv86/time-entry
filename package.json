@@ -15,7 +15,8 @@
     "start:dev": "nodemon index",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"services/*.js\" --fix",
-    "prettier": "prettier \"services/*.js\" --write"
+    "prettier": "prettier \"services/*.js\" --write",
+    "release": "semantic-release"
   },
   "repository": {
     "type": "git",
@@ -50,6 +51,9 @@
     "form-data": "~4.0.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/npm": "12.0.1",
     "@typescript-eslint/eslint-plugin": "~7.3.1",
     "eslint": "~8.57.0",
     "eslint-config-semistandard": "~17.0.0",
@@ -59,7 +63,8 @@
     "eslint-plugin-promise": "~6.1.1",
     "husky": "~4.3.6",
     "lint-staged": "~15.2.2",
-    "prettier": "~3.2.5"
+    "prettier": "~3.2.5",
+    "semantic-release": "24.2.0"
   },
   "lint-staged": {
     "**/*.(js)": [
