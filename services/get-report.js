@@ -73,6 +73,7 @@ const getReport = async (filters) => {
         task: res[date]?.task || 0,
         adhoc: res[date]?.adhoc || 0,
         total: res[date]?.total || 0,
+        pending: res[date]?.pending || 480,
       };
 
       if (synced === 'true') {
@@ -88,6 +89,7 @@ const getReport = async (filters) => {
       }
 
       res[date].total = res[date].task + res[date].adhoc;
+      res[date].pending = 480 - res[date].total;
 
       return res;
     }, {});
