@@ -72,6 +72,7 @@ const getReport = async (filters) => {
         open: res[date]?.open || 0,
         task: res[date]?.task || 0,
         adhoc: res[date]?.adhoc || 0,
+        total: res[date]?.total || 0,
       };
 
       if (synced === 'true') {
@@ -85,6 +86,8 @@ const getReport = async (filters) => {
       } else {
         res[date].task += +duration;
       }
+
+      res[date].total = res[date].task + res[date].adhoc;
 
       return res;
     }, {});
