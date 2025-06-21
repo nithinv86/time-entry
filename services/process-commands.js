@@ -5,6 +5,8 @@ const { logTaskHoursAndSync } = require('./log-task-hours-and-sync');
 const { addNewTask } = require('./add-task');
 const { updateTask, deleteTask } = require('./update-delete-task');
 const { getGitlabActivities } = require('./get-gitlab-activities');
+const { getZohoTasks } = require('./get-zoho-tasks');
+const axios = require('axios');
 const processArgs = async (type, value) => {
   try {
     await checkConfig();
@@ -50,6 +52,62 @@ const processArgs = async (type, value) => {
 
       case 'gitlab': {
         await getGitlabActivities(values);
+
+        break;
+      }
+
+      case 'merge': {
+        const tasks = await getZohoTasks({ params: { type: ['2'] } });
+        const taskIds = tasks
+          .filter((task) => task.gitlab_iid)
+          .map((task) => ({ taskId: task.taskId, gitlabIid: task.gitlab_iid }));
+
+        if (!taskIds.length) {
+          console.log('No active tasks with GitLab IIDs found');
+          break;
+        }
+
+        const mergeRequests = await Promise.all(
+          taskIds.map(async ({ taskId, gitlabIid }) => {
+            try {
+              const response = await axios.get(
+                `${process.env.GITLAB_API_URL}/projects/${process.env.GITLAB_PROJECT_ID}/merge_requests/${gitlabIid}`,
+                {
+                  headers: {
+                    'PRIVATE-TOKEN': process.env.GITLAB_TOKEN,
+                  },
+                },
+              );
+              return {
+                taskId,
+                gitlabIid,
+                status: response.data.state,
+                assignee: response.data.assignee?.name || 'Unassigned',
+                title: response.data.title,
+                webUrl: response.data.web_url,
+              };
+            } catch (error) {
+              return {
+                taskId,
+                gitlabIid,
+                status: 'error',
+                error: error.response?.status === 404 ? 'MR not found' : 'Failed to fetch MR',
+              };
+            }
+          }),
+        );
+
+        console.table(
+          mergeRequests.map((mr) => ({
+            'Task ID': mr.taskId,
+            'MR IID': mr.gitlabIid,
+            Status: mr.status,
+            Assignee: mr.assignee || '-',
+            Title: mr.title || '-',
+            URL: mr.webUrl || '-',
+            Error: mr.error || '-',
+          })),
+        );
 
         break;
       }

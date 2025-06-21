@@ -16,9 +16,11 @@ const getTasksByDate = async (filters) => {
     let startDate = new Date(filters.from);
     const itemHeading = contentTableHeading.split('|').reduce((acc, val) => {
       const item = val.trim();
+
       if (item && item !== '--') {
         acc.push(item);
       }
+
       return acc;
     }, []);
 
